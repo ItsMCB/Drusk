@@ -1,0 +1,27 @@
+#                    ____                 _
+#                   |  _ \ _ __ _   _ ___| | __
+#                   | | | | '__| | | / __| |/ /
+#                   | |_| | |  | |_| \__ \   <
+#                   |____/|_|   \__,_|___/_|\_\
+#              By ItsMCB and other Drusk contributors
+
+#     A message from Martin (ItsMCB), the lead developer:
+#     I truly hope this plugin fits your needs. If you come across a problem or have a suggestion, please open an issue on GitHub.
+#     Additionally, if you need help or more information, please check out the "README" on GitHub.
+#     GitHub: https://github.com/ItsMCB/Drusk
+
+# The following lines with hashtags are comments designed to help you understand the options in this configuration file
+
+# TODO finish config options
+features:
+  about:
+    enabled: true
+  double-jump:
+    enabled: true
+    power: 1.5
+    cooldown: 2.5
+  hooked-extras:
+    connect:
+      enabled: true
+    radio:
+      enabled: true

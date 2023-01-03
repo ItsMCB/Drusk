@@ -1,12 +1,9 @@
 name: Drusk
 version: '${version}'
 main: me.itsmcb.drusk.Drusk
-api-version: 1.19
+api-version: 1.18
 authors: [ ItsMCB ]
 description: Small but desirable features that are configurable and aimed at benefiting a variety of server setups
 website: https://github.com/ItsMCB/Drusk
-commands:
-  abt:
-    description: View information about multiple things
-  connect:
-    description: Switch to another server via plugin message request
+softdepend:
+  - Citizens

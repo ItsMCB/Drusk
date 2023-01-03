@@ -1,42 +1,71 @@
 package me.itsmcb.drusk;
 
-import me.itsmcb.drusk.commands.hooked.AboutCMD;
-import me.itsmcb.drusk.commands.hooked.bungeecord.ConnectCMD;
-import me.itsmcb.drusk.listeners.DoubleJump;
-import me.itsmcb.vexelcore.common.api.manager.CooldownManager;
-import org.bukkit.Bukkit;
+import libs.dev.dejvokep.boostedyaml.serialization.YamlSerializer;
+import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
+import me.itsmcb.drusk.features.doublejump.DoubleJumpFeature;
+import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
+import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
+import me.itsmcb.drusk.features.info.InfoFeature;
+import me.itsmcb.drusk.features.inventory.InventoryFeature;
+import me.itsmcb.drusk.features.npctool.NPCToolFeature;
+import me.itsmcb.drusk.features.skin.SkinFeature;
+import me.itsmcb.drusk.features.spawn.SpawnFeature;
+import me.itsmcb.drusk.features.specialevents.SpecialEventsFeature;
+import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
+import me.itsmcb.vexelcore.bukkit.api.managers.LocalizationManager;
+import me.itsmcb.vexelcore.bukkit.api.managers.PermissionManager;
+import me.itsmcb.vexelcore.common.api.config.BoostedConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Drusk extends JavaPlugin {
 
     private Drusk instance;
-    private CooldownManager DJCooldownManager;
+    private BukkitFeatureManager bukkitFeatureManager;
+    private LocalizationManager localizationManager;
+    private PermissionManager permissionManager;
 
-    public CooldownManager getDJCooldownManager() {
-        return DJCooldownManager;
+    private BoostedConfig mainConfig;
+
+    public BukkitFeatureManager getBukkitFeatureManager() {
+        return bukkitFeatureManager;
+    }
+    public LocalizationManager getLocalizationManager() {
+        return localizationManager;
+    }
+    public PermissionManager getPermissionManager() { return permissionManager; }
+
+    public BoostedConfig getMainConfig() {
+        return mainConfig;
     }
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
         this.instance = this;
-        loadFeatures();
-        getCommand("connect").setExecutor(new ConnectCMD(instance));
-        getCommand("connect").setTabCompleter(new ConnectCMD(instance));
-        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        getCommand("abt").setExecutor(new AboutCMD(instance));
-    }
+        // Config
+        YamlSerializer mainConfigSerializer = new SpigotSerializer();
+        mainConfig = new BoostedConfig(getDataFolder(),"config", getResource("config.yml"), mainConfigSerializer);
 
-    // TODO VexelCore "Feature" API to quickly load/unload events, commands, channel messages, etc.
-    // TODO finish this so config settings work
-    private void loadFeatures() {
-        if (getConfig().getBoolean("features.double-jump.enabled")) {
-            this.DJCooldownManager = new CooldownManager((long) getConfig().getDouble("features.double-jump.cooldown"));
-            Bukkit.getPluginManager().registerEvents(new DoubleJump(instance), this);
-        }
-    }
+        // Set permissions
+        this.permissionManager = new PermissionManager();
+        permissionManager.set("admin","drusk.admin");
 
-    private void unloadFeatures() {
-        // TODO for a "/drusk reload" command (wait for VC Feature API tho)
+        // Load configurations and options
+        // todo hook into future localization plugin to get default server language
+        this.localizationManager = new LocalizationManager(this, "en_US");
+        localizationManager.register("en_US");
+
+        // Register features
+        this.bukkitFeatureManager = new BukkitFeatureManager();
+        bukkitFeatureManager.register(new DruskCMDFeature(instance));
+        bukkitFeatureManager.register(new DoubleJumpFeature(instance));
+        bukkitFeatureManager.register(new ConnectFeature(instance));
+        //bukkitFeatureManager.register(new PlaceFlag(instance));
+        bukkitFeatureManager.register(new NPCToolFeature(instance));
+        bukkitFeatureManager.register(new SpecialEventsFeature(instance));
+        bukkitFeatureManager.register(new SpawnFeature(instance));
+        bukkitFeatureManager.register(new InfoFeature(instance));
+        bukkitFeatureManager.register(new SkinFeature(instance));
+        bukkitFeatureManager.register(new InventoryFeature(instance));
+        bukkitFeatureManager.reload();
     }
 }

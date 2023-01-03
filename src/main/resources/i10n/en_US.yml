@@ -1,0 +1,5 @@
+prefix: "&3&lDrusk &7» "
+result: "&3%1&7: &b%2"
+bar: "&7-═════════ &b&l%1 &7═════════-"
+error-permission: "&cYou lack permission for that command."
+error-player-only-command: "&cOnly players can execute that command."

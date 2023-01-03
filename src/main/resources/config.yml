@@ -12,16 +12,40 @@
 
 # The following lines with hashtags are comments designed to help you understand the options in this configuration file
 
-# TODO finish config options
-features:
-  about:
+file-version: 1
+
+tab:
+  enabled: true
+  top:
+    - ""
+    - "&7&m          &r &b&lDrusk &7&m          "
+    - ""
+  bottom:
+    - ""
+    - "&7&m          &r &b&lDrusk &7&m          "
+    - ""
+spawn:
+  location: null
+
+events:
+  join:
     enabled: true
-  double-jump:
+    # Leave empty to disable default message
+    message: "&e%player_name% jumped into the server"
+    title:
+      title-message: "&aLibre Galaxy"
+      subtitle-message: "&eWelcome"
+      fade-in: 1
+      stay: 5
+      fade-out: 1
+    spawn-teleport:
+      on-first-join: true
+      on-join: true
+  leave:
     enabled: true
-    power: 1.5
-    cooldown: 2.5
-  hooked-extras:
-    connect:
-      enabled: true
-    radio:
-      enabled: true
+    # Leave empty to disable default message
+    message: "&e%player_name% left the server to take a break"
+  death:
+    enabled: true
+    # Leave empty to disable default message
+    message: "&e%player_name% got rekt"

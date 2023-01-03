@@ -16,13 +16,31 @@ repositories {
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
     maven { url 'https://jitpack.io' }
+    maven {
+        name = 'citizens-repo'
+        url = 'https://maven.citizensnpcs.co/repo'
+    }
+    // PAPI
+    maven {
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
 }
 
 dependencies {
+    // Paper
     compileOnly 'io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT'
+    // Citizens
+    compileOnly('net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT') {
+        exclude group: '*', module: '*'
+    }
+    // LuckPerms
+    compileOnly 'net.luckperms:api:5.4'
+    // NoteBlock API
     implementation 'com.github.koca2000:NoteBlockAPI:1.6.1'
-    compileOnly files('/home/martin/GitHub/VexelCore/bukkit/build/libs/bukkit-1.0.1-SNAPSHOT.jar')
-    compileOnly files('/home/martin/GitHub/VexelCore/common/build/libs/VexelCore-Common-1.0.1-SNAPSHOT.jar')
+    // Placeholder API
+    compileOnly 'me.clip:placeholderapi:2.11.1'
+    // VexelCore
+    compileOnly files('/home/martin/GitHub/VexelCore/bukkit/build/libs/VexelCore-Bukkit-1.0.1-SNAPSHOT.jar')
 }
 
 def targetJavaVersion = 17

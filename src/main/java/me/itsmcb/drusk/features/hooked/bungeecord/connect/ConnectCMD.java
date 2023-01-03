@@ -1,4 +1,4 @@
-package me.itsmcb.drusk.commands.hooked.bungeecord;
+package me.itsmcb.drusk.features.hooked.bungeecord.connect;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -7,25 +7,23 @@ import me.itsmcb.vexelcore.bukkit.VexelCoreBukkitAPI;
 import me.itsmcb.vexelcore.bukkit.api.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ConnectCMD implements CommandExecutor, TabCompleter {
+public class ConnectCMD extends Command {
 
     private Drusk instance;
 
     public ConnectCMD(Drusk instance) {
+        super("connect");
         this.instance = instance;
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
         if (sender instanceof Player player && args.length > 0) {
             VexelCoreBukkitAPI.refreshProxyServerNameCache();
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> {
@@ -46,7 +44,7 @@ public class ConnectCMD implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
         return VexelCoreBukkitAPI.getProxyServerNamesCache();
     }
 }

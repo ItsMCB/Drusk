@@ -1,4 +1,4 @@
-package me.itsmcb.drusk.features.npctool;
+package me.itsmcb.drusk.features.tools;
 
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.experience.AudioResponse;

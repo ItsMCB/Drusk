@@ -17,13 +17,15 @@ file-version: 1
 tab:
   enabled: true
   top:
-    - ""
-    - "&7&m          &r &b&lDrusk &7&m          "
-    - ""
+    - '                                        '
+    - "&d&lLibre Galaxy"
+    - "&7play.libregalaxy.org"
+    - ''
   bottom:
-    - ""
-    - "&7&m          &r &b&lDrusk &7&m          "
-    - ""
+    - ''
+    - "&7Server: &d%server_name% &8| &7Ping: &d%player_ping%ms"
+    - "&7Online: &d%server_online% &8| &7Global: &d%bungee_total%"
+    - ''
 spawn:
   location: null
 

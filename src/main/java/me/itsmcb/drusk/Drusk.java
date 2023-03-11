@@ -2,15 +2,20 @@ package me.itsmcb.drusk;
 
 import libs.dev.dejvokep.boostedyaml.serialization.YamlSerializer;
 import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
-import me.itsmcb.drusk.features.doublejump.DoubleJumpFeature;
 import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
+import me.itsmcb.drusk.features.flyspeed.FlySpeedFeat;
+import me.itsmcb.drusk.features.gamemode.GamemodeFeat;
+import me.itsmcb.drusk.features.head.HeadFeat;
 import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
-import me.itsmcb.drusk.features.info.InfoFeature;
-import me.itsmcb.drusk.features.inventory.InventoryFeature;
-import me.itsmcb.drusk.features.npctool.NPCToolFeature;
+import me.itsmcb.drusk.features.Tab.TabFeat;
+import me.itsmcb.drusk.features.status.StatusFeature;
+import me.itsmcb.drusk.features.inventory.InventoryFeat;
+import me.itsmcb.drusk.features.tools.ToolsFeature;
 import me.itsmcb.drusk.features.skin.SkinFeature;
 import me.itsmcb.drusk.features.spawn.SpawnFeature;
 import me.itsmcb.drusk.features.specialevents.SpecialEventsFeature;
+import me.itsmcb.drusk.features.teleport.TeleportFeat;
+import me.itsmcb.drusk.features.weext.WorldEditExtensionsFeat;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.LocalizationManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.PermissionManager;
@@ -57,15 +62,23 @@ public final class Drusk extends JavaPlugin {
         // Register features
         this.bukkitFeatureManager = new BukkitFeatureManager();
         bukkitFeatureManager.register(new DruskCMDFeature(instance));
-        bukkitFeatureManager.register(new DoubleJumpFeature(instance));
+        //bukkitFeatureManager.register(new DoubleJumpFeature(instance));
         bukkitFeatureManager.register(new ConnectFeature(instance));
         //bukkitFeatureManager.register(new PlaceFlag(instance));
-        bukkitFeatureManager.register(new NPCToolFeature(instance));
+        bukkitFeatureManager.register(new ToolsFeature(instance));
         bukkitFeatureManager.register(new SpecialEventsFeature(instance));
         bukkitFeatureManager.register(new SpawnFeature(instance));
-        bukkitFeatureManager.register(new InfoFeature(instance));
+        bukkitFeatureManager.register(new StatusFeature(instance));
         bukkitFeatureManager.register(new SkinFeature(instance));
-        bukkitFeatureManager.register(new InventoryFeature(instance));
+        bukkitFeatureManager.register(new InventoryFeat(instance));
+        bukkitFeatureManager.register(new FlySpeedFeat(instance));
+        bukkitFeatureManager.register(new WorldEditExtensionsFeat(instance));
+        bukkitFeatureManager.register(new HeadFeat(instance));
+        bukkitFeatureManager.register(new TeleportFeat(instance));
+        bukkitFeatureManager.register(new TabFeat(instance));
+        //bukkitFeatureManager.register(new KaboomFeat(instance));
+        // Game mode stuff
+        bukkitFeatureManager.register(new GamemodeFeat(instance));
         bukkitFeatureManager.reload();
     }
 }

@@ -51,6 +51,7 @@ public class SpecialEventsListener implements Listener {
         Duration fadeOut = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.fade-out"));
         Title title = Title.title(titleMessage, subtitleMessage, Title.Times.times(fadeIn, stay, fadeOut));
         player.showTitle(title);
+
         // Play sound
         // TODO make configurable
         Sound sound = Sound.sound(Key.key("block.note_block.bit"), Sound.Source.MASTER, 1f, 1f);
@@ -62,6 +63,7 @@ public class SpecialEventsListener implements Listener {
                 player.playSound(sound);
             }
         }.runTaskLater(instance, 20L);
+
     }
 
     @EventHandler

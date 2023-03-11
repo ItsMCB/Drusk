@@ -2,16 +2,16 @@ package me.itsmcb.drusk.features.inventory;
 
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
+import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.common.api.command.CMDHelper;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class Clear extends CustomCommand {
+public class ClearSCmd extends CustomCommand {
 
-    public Clear() {
+    public ClearSCmd() {
         super("clear", "Clears inventory of player", "drusk.admin");
         super.addParameter("[username]","The player whose inventory will be cleared");
     }
@@ -32,6 +32,6 @@ public class Clear extends CustomCommand {
 
     @Override
     public List<String> getAdditionalCompletions() {
-        return Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).toList();
+        return BukkitUtils.getOnlinePlayerNames();
     }
 }

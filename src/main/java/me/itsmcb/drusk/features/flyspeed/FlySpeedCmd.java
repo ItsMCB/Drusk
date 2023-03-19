@@ -6,6 +6,7 @@ import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.common.api.command.CMDHelper;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class FlySpeedCmd extends CustomCommand {
     }
 
     @Override
-    public List<String> getAdditionalCompletions() {
+    public List<String> getAdditionalCompletions(CommandSender sender) {
         return List.of("1","2","3","4","5","6","7","8","9","10");
     }
 }

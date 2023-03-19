@@ -4,10 +4,12 @@ import libs.dev.dejvokep.boostedyaml.serialization.YamlSerializer;
 import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
 import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
 import me.itsmcb.drusk.features.flyspeed.FlySpeedFeat;
+import me.itsmcb.drusk.features.fun.FunFeat;
 import me.itsmcb.drusk.features.gamemode.GamemodeFeat;
 import me.itsmcb.drusk.features.head.HeadFeat;
 import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
 import me.itsmcb.drusk.features.Tab.TabFeat;
+import me.itsmcb.drusk.features.msg.MsgFeat;
 import me.itsmcb.drusk.features.status.StatusFeature;
 import me.itsmcb.drusk.features.inventory.InventoryFeat;
 import me.itsmcb.drusk.features.tools.ToolsFeature;
@@ -19,6 +21,7 @@ import me.itsmcb.drusk.features.weext.WorldEditExtensionsFeat;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.LocalizationManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.PermissionManager;
+import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Manager;
 import me.itsmcb.vexelcore.common.api.config.BoostedConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +33,12 @@ public final class Drusk extends JavaPlugin {
     private PermissionManager permissionManager;
 
     private BoostedConfig mainConfig;
+
+    private MenuV2Manager menuManager;
+
+    public MenuV2Manager getMenuManager() {
+        return menuManager;
+    }
 
     public BukkitFeatureManager getBukkitFeatureManager() {
         return bukkitFeatureManager;
@@ -76,9 +85,12 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new HeadFeat(instance));
         bukkitFeatureManager.register(new TeleportFeat(instance));
         bukkitFeatureManager.register(new TabFeat(instance));
+        bukkitFeatureManager.register(new MsgFeat(instance));
+        bukkitFeatureManager.register(new FunFeat(instance));
         //bukkitFeatureManager.register(new KaboomFeat(instance));
         // Game mode stuff
         bukkitFeatureManager.register(new GamemodeFeat(instance));
         bukkitFeatureManager.reload();
+        menuManager = new MenuV2Manager(this);
     }
 }

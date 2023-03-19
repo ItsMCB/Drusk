@@ -7,6 +7,7 @@ import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.common.api.command.CMDHelper;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class PlayerSCMD extends CustomCommand {
     }
 
     @Override
-    public List<String> getCompletions() {
+    public List<String> getCompletions(CommandSender sender) {
         return BukkitUtils.getOnlinePlayerNames();
     }
 

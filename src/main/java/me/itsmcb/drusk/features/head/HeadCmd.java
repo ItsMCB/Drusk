@@ -6,6 +6,7 @@ import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.common.api.utils.MojangUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -43,7 +44,7 @@ public class HeadCmd extends CustomCommand {
     }
 
     @Override
-    public List<String> getAdditionalCompletions() {
+    public List<String> getAdditionalCompletions(CommandSender sender) {
         return Stream.concat(BukkitUtils.getOnlinePlayerNames().stream(), MojangUtils.MHFHeads().stream()).toList();
     }
 }

@@ -7,6 +7,7 @@ import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.common.api.command.CMDHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class AdventureCmd extends CustomCommand {
     }
 
     @Override
-    public List<String> getAdditionalCompletions() {
+    public List<String> getAdditionalCompletions(CommandSender sender) {
         return BukkitUtils.getOnlinePlayerNames();
     }
 }

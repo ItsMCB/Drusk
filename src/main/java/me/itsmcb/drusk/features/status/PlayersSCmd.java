@@ -8,6 +8,7 @@ import me.itsmcb.vexelcore.common.api.utils.TimeUtils;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class PlayersSCmd extends CustomCommand {
     }
 
     @Override
-    public List<String> getAdditionalCompletions() {
+    public List<String> getAdditionalCompletions(CommandSender sender) {
         return List.of("-l");
     }
 }

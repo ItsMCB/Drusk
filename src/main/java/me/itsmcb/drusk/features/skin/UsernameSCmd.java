@@ -6,7 +6,7 @@ import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.Msg;
 import me.itsmcb.vexelcore.bukkit.api.utils.ParticleUtils;
 import me.itsmcb.vexelcore.bukkit.api.utils.PlayerUtils;
-import me.itsmcb.vexelcore.common.api.web.mojang.PlayerSkinInformation;
+import me.itsmcb.vexelcore.common.api.web.mojang.OnlinePlayerSkin;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ public class UsernameSCmd extends CustomCommand {
             new BukkitMsgBuilder("&cProvide a username").send(player);
             return;
         }
-        PlayerSkinInformation skinInformation = PlayerUtils.setRealSkin(player, args[0], instance);
+        OnlinePlayerSkin skinInformation = PlayerUtils.setRealSkin(player, args[0], instance);
         if (!(skinInformation.isInformationComplete())) {
             Msg.send(player, "&cError occurred. Does that player exist?");
             return;

@@ -1,0 +1,17 @@
+# PLEASE DO NOT EDIT THE FILE VERSION
+file-version: 1
+
+sections:
+  - - message-text: "       &7Welcome to\n     &d&lLibre Galaxy\n\n\n"
+      hover-text: '&7Click to visit our website'
+      click-event-action: open_url
+      click-event-value: https://libregalaxy.org
+      ==: me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder
+    - message-text: "&d&lWhat is this?\n"
+      ==: me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder
+    - message-text: "&3Libre Galaxy is a custom-coded creative plot server with advanced building tools and fun player-made gamemodes and events."
+      ==: me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder
+  - - message-text: "&d&lWho is this for?\n"
+      ==: me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder
+    - message-text: "&7- &3Players looking to use &dWorldEdit &3and &dVoxel Sniper\n&7- &3Players looking to create exciting multiplayer experiences for others to enjoy"
+      ==: me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder

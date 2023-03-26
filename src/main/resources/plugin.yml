@@ -5,5 +5,7 @@ api-version: 1.18
 authors: [ ItsMCB ]
 description: Small but desirable features that are configurable and aimed at benefiting a variety of server setups
 website: https://github.com/ItsMCB/Drusk
+depend:
+  - VexelCore
 softdepend:
   - Citizens

@@ -19,6 +19,7 @@ public class SkinCMD extends CustomCommand {
         super("skin","Set custom skin","drusk.skin");
         this.instance = instance;
         registerSubCommand(new CopySCmd(instance));
+        registerSubCommand(new SelectSCmd(instance));
         addParameter("reset", "Resets skin to default.");
     }
 

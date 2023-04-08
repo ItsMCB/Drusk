@@ -15,6 +15,7 @@ import me.itsmcb.drusk.features.skin.DruskCostume;
 import me.itsmcb.drusk.features.skin.SkinFeature;
 import me.itsmcb.drusk.features.spawn.SpawnFeature;
 import me.itsmcb.drusk.features.specialevents.SpecialEventsFeature;
+import me.itsmcb.drusk.features.specialitems.SpecialItemsFeat;
 import me.itsmcb.drusk.features.status.StatusFeature;
 import me.itsmcb.drusk.features.teleport.TeleportFeat;
 import me.itsmcb.drusk.features.tools.ToolsFeature;
@@ -110,9 +111,7 @@ public final class Drusk extends JavaPlugin {
         // Register features
         this.bukkitFeatureManager = new BukkitFeatureManager();
         bukkitFeatureManager.register(new DruskCMDFeature(instance));
-        //bukkitFeatureManager.register(new DoubleJumpFeature(instance));
         bukkitFeatureManager.register(new ConnectFeature(instance));
-        //bukkitFeatureManager.register(new PlaceFlag(instance));
         bukkitFeatureManager.register(new ToolsFeature(instance));
         bukkitFeatureManager.register(new SpecialEventsFeature(instance));
         bukkitFeatureManager.register(new SpawnFeature(instance));
@@ -127,8 +126,11 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new MsgFeat(instance));
         bukkitFeatureManager.register(new FunFeat(instance));
         bukkitFeatureManager.register(new BookFeat(instance));
-        //bukkitFeatureManager.register(new KaboomFeat(instance));
+        bukkitFeatureManager.register(new SpecialItemsFeat(instance));
         bukkitFeatureManager.register(new GamemodeFeat(instance));
+        //bukkitFeatureManager.register(new DoubleJumpFeature(instance));
+        //bukkitFeatureManager.register(new PlaceFlag(instance));
+        //bukkitFeatureManager.register(new KaboomFeat(instance));
         resetManagers();
     }
 }

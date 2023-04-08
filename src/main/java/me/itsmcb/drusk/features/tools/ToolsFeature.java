@@ -12,5 +12,7 @@ public class ToolsFeature extends BukkitFeature {
         this.instance = instance;
         registerCommand(new NPCToolCMD(instance));
         registerCommand(new ColorsCmd());
+        registerListener(new ArmorStandEditorList(instance));
+        //registerListener(new MobSpawnerEditor(instance));
     }
 }

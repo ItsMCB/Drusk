@@ -51,8 +51,8 @@ public class MsgCmd extends CustomCommand {
         targetPlayer.sendMessage(component);
 
         // Send staff message for moderation purposes
-        Bukkit.getOnlinePlayers().stream().filter(onlinePlayer -> (onlinePlayer.hasPermission("drusk.admin") && onlinePlayer != targetPlayer && onlinePlayer != player)).toList().forEach(onlinePlayer -> {
-            onlinePlayer.sendMessage(formattedMessage);
+        Bukkit.getOnlinePlayers().stream().filter(onlinePlayer -> (onlinePlayer.hasPermission("drusk.mod") && onlinePlayer != targetPlayer && onlinePlayer != player)).toList().forEach(onlinePlayer -> {
+            new BukkitMsgBuilder(formattedMessage).send(onlinePlayer);
         });
     }
 

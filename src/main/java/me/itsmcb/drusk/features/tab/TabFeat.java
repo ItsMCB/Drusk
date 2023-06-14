@@ -1,4 +1,4 @@
-package me.itsmcb.drusk.features.Tab;
+package me.itsmcb.drusk.features.tab;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.itsmcb.drusk.Drusk;

@@ -3,6 +3,7 @@ package me.itsmcb.drusk.features.status;
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
+import me.itsmcb.vexelcore.common.api.utils.TimeUtils;
 import org.bukkit.entity.Player;
 
 import java.lang.management.ManagementFactory;
@@ -28,7 +29,7 @@ public class JVMSCMD extends CustomCommand {
         new BukkitMsgBuilder("&3Memory Usage: &b"+ percentDecimalFormat.format(memoryUsedPercent) + "% &7(&b" + percentDecimalFormat.format(memoryUsed) + " mb&7/&b"+percentDecimalFormat.format(memoryTotal)+" mb&7)")
                 .send(player);
         // Uptime
-        new BukkitMsgBuilder("&3Uptime: &b" + ManagementFactory.getRuntimeMXBean().getUptime() + " milliseconds").send(player);
+        new BukkitMsgBuilder("&3Uptime: &b" + TimeUtils.formatSecondsToTime((int) (ManagementFactory.getRuntimeMXBean().getUptime()/1000))).send(player);
         // Platform
         new BukkitMsgBuilder("&3Platform: &b" + System.getProperty("os.arch") + " &7(&b"+System.getProperty("os.name")+"&7)").send(player);
         // JVM
@@ -37,8 +38,10 @@ public class JVMSCMD extends CustomCommand {
         String JVMVersion = ManagementFactory.getRuntimeMXBean().getVmVersion();
         String JavaVersion =  ManagementFactory.getRuntimeMXBean().getSpecVersion();
         new BukkitMsgBuilder("&3JVM: &b" + JVMName + " &7- &b" + JVMVendor + " &7- &bbuild " + JVMVersion + " &7(&bJava "+JavaVersion+"&7)").send(player);
+        // Processors
+        new BukkitMsgBuilder("&3CPU Processors: &b" + Runtime.getRuntime().availableProcessors()).send(player);
         // Threads
-        new BukkitMsgBuilder("&3Threads Running: &b" + Thread.getAllStackTraces().size());
+        new BukkitMsgBuilder("&3Threads: &b" + ManagementFactory.getThreadMXBean().getThreadCount()).send(player);
         // Flags
         new BukkitMsgBuilder("&3Flags: &b" + String.join(", ", ManagementFactory.getRuntimeMXBean().getInputArguments())).send(player);
 

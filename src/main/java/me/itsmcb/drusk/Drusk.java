@@ -1,8 +1,9 @@
 package me.itsmcb.drusk;
 
 import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
-import me.itsmcb.drusk.features.Tab.TabFeat;
+import me.itsmcb.drusk.features.tab.TabFeat;
 import me.itsmcb.drusk.features.book.BookFeat;
+import me.itsmcb.drusk.features.creative.CreativeFeat;
 import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
 import me.itsmcb.drusk.features.flyspeed.FlySpeedFeat;
 import me.itsmcb.drusk.features.fun.FunFeat;
@@ -128,6 +129,7 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new BookFeat(instance));
         bukkitFeatureManager.register(new SpecialItemsFeat(instance));
         bukkitFeatureManager.register(new GamemodeFeat(instance));
+        bukkitFeatureManager.register(new CreativeFeat(instance));
         //bukkitFeatureManager.register(new DoubleJumpFeature(instance));
         //bukkitFeatureManager.register(new PlaceFlag(instance));
         //bukkitFeatureManager.register(new KaboomFeat(instance));

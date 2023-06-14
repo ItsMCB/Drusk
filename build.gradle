@@ -24,11 +24,15 @@ repositories {
     maven {
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
     }
+    // CoreProtect
+    maven {
+        url = "https://maven.playpro.com/"
+    }
 }
 
 dependencies {
     // Paper
-    compileOnly 'io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
     // Citizens
     compileOnly('net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT') {
         exclude group: '*', module: '*'
@@ -38,7 +42,9 @@ dependencies {
     // NoteBlock API
     implementation 'com.github.koca2000:NoteBlockAPI:1.6.1'
     // Placeholder API
-    compileOnly 'me.clip:placeholderapi:2.11.1'
+    compileOnly 'me.clip:placeholderapi:2.11.3'
+    // CoreProtect
+    compileOnly "net.coreprotect:coreprotect:21.3"
     // VexelCore
     compileOnly files('/home/martin/GitHub/VexelCore/bukkit/build/libs/VexelCore-Bukkit-1.0.1-SNAPSHOT.jar')
 }

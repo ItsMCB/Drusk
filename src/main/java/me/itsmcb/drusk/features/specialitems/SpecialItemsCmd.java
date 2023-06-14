@@ -24,7 +24,7 @@ public class SpecialItemsCmd extends CustomCommand {
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
-        MenuV2 menu = new MenuV2("&d&lSpecial Items", InventoryType.CHEST,9);
+        MenuV2 menu = new MenuV2("&d&lSpecial Items", InventoryType.CHEST,18);
 
         ItemBuilder barrier = new ItemBuilder(Material.BARRIER).name("&d&lBarrier");
         menu.addItem(new MenuV2Item(barrier).leftClickAction(event -> {
@@ -54,6 +54,27 @@ public class SpecialItemsCmd extends CustomCommand {
                 .name("&d&lKnowledge Book");
         menu.addItem(new MenuV2Item(knowledgeBook).leftClickAction(event -> {
             player.getInventory().addItem(knowledgeBook.getCleanItemStack());
+        }));
+
+        ItemBuilder furnace = new ItemBuilder(Material.FURNACE)
+                .name("&d&lLit Furnace")
+                .addData(new MenuV2ItemData(specialItemKey,"lit_furnace"));
+        menu.addItem(new MenuV2Item(furnace).leftClickAction(event -> {
+            player.getInventory().addItem(furnace.getCleanItemStack());
+        }));
+
+        ItemBuilder smoker = new ItemBuilder(Material.SMOKER)
+                .name("&d&lLit Smoker")
+                .addData(new MenuV2ItemData(specialItemKey,"lit_smoker"));
+        menu.addItem(new MenuV2Item(smoker).leftClickAction(event -> {
+            player.getInventory().addItem(smoker.getCleanItemStack());
+        }));
+
+        ItemBuilder campfire = new ItemBuilder(Material.CAMPFIRE)
+                .name("&d&lLit Campfire")
+                .addData(new MenuV2ItemData(specialItemKey,"lit_campfire"));
+        menu.addItem(new MenuV2Item(campfire).leftClickAction(event -> {
+            player.getInventory().addItem(campfire.getCleanItemStack());
         }));
 
         ItemBuilder endPortalFrame = new ItemBuilder(Material.END_PORTAL_FRAME)

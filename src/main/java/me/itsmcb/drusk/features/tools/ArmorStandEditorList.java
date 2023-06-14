@@ -5,6 +5,7 @@ import me.itsmcb.vexelcore.bukkit.api.menuv2.ItemBuilder;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Item;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -43,8 +44,13 @@ public class ArmorStandEditorList implements Listener {
         if (player != null && !(player.isSneaking()) && !player.hasPermission("drusk.editor.armorstand")) {
             return;
         }
-        event.setCancelled(true);
         ArmorStand armorStand = (ArmorStand) event.getEntity();
+        ArmorStandEditStartEvent editStartEvent = new ArmorStandEditStartEvent(armorStand, player);
+        Bukkit.getPluginManager().callEvent(editStartEvent);
+        if (editStartEvent.isCancelled()) {
+            return;
+        }
+        event.setCancelled(true);
         new BukkitMsgBuilder("&aYou selected an armor stand!").send(player);
 
 

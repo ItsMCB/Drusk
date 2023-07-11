@@ -3,7 +3,6 @@ package me.itsmcb.drusk.features.skin;
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Item;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.SkullBuilder;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
@@ -41,7 +40,7 @@ public class OnlineSCmd extends CustomCommand {
         MenuV2 menu = new MenuV2("Select Player To Copy");
         // Filter command executor
         Bukkit.getOnlinePlayers().stream().filter(onlinePlayer -> onlinePlayer.getUniqueId() != player.getUniqueId()).forEach(onlinePlayer -> {
-            menu.addItem(new MenuV2Item(new SkullBuilder(onlinePlayer).name("&d&l"+onlinePlayer.getName()).lore(List.of(new BukkitMsgBuilder("&7Click to copy skin!").get()))).leftClickAction(event -> {
+            menu.addItem(new SkullBuilder(onlinePlayer).name("&d&l"+onlinePlayer.getName()).lore(new BukkitMsgBuilder("&7Click to copy skin!").get()).leftClickAction(event -> {
                 PlayerUtils.copy(onlinePlayer,player);
             }));
         });

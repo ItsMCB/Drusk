@@ -10,6 +10,7 @@ import me.itsmcb.vexelcore.bukkit.api.menuv2.SkullBuilder;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.PlayerUtils;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 
 import java.util.List;
 
@@ -30,36 +31,52 @@ public class SelectSCmd extends CustomCommand {
         List<DruskCostume> materialCostumes = (List<DruskCostume>) category.getList("materials");
         List<DruskCostume> skinPackDefault = (List<DruskCostume>) category.getList("legacy_console_skin_pack_default");
         List<DruskCostume> skinPackOne = (List<DruskCostume>) category.getList("legacy_console_skin_pack_one");
+        List<DruskCostume> ourGiftToYou = (List<DruskCostume>) category.getList("our_gift_to_you");
+        List<DruskCostume> special = (List<DruskCostume>) category.getList("special");
 
-        MenuV2 demoMenu = new PaginatedMenu("Select Skin To Copy",36, player);
+        MenuV2 demoMenu = new PaginatedMenu("Random",36, player);
         addSkins(demoCostumes, demoMenu, player);
 
-        MenuV2 materialsMenu = new PaginatedMenu("Select Skin To Copy",36, player);
+        MenuV2 materialsMenu = new PaginatedMenu("Materials",36, player);
         addSkins(materialCostumes, materialsMenu, player);
 
-        MenuV2 skinPackDefaultMenu = new PaginatedMenu("Select Skin To Copy",36, player);
+        MenuV2 skinPackDefaultMenu = new PaginatedMenu("Default (Legacy Console)",36, player);
         addSkins(skinPackDefault, skinPackDefaultMenu, player);
 
-        MenuV2 skinPackOneMenu = new PaginatedMenu("Select Skin To Copy",36, player);
+        MenuV2 skinPackOneMenu = new PaginatedMenu("SP One (Legacy Console)",36, player);
         addSkins(skinPackOne, skinPackOneMenu, player);
+
+        MenuV2 ourGiftToYouMenu = new PaginatedMenu("Our Gift to You by 57Digital",36, player);
+        addSkins(ourGiftToYou, ourGiftToYouMenu, player);
+
+        MenuV2 specialMenu = new PaginatedMenu("Special",36, player);
+        addSkins(special, specialMenu, player);
 
         // Main Menu
         String amongUsCharacter = "ewogICJ0aW1lc3RhbXAiIDogMTY3OTgwNjU3NzgzNywKICAicHJvZmlsZUlkIiA6ICI3ODEwY2MzZWJmZjU0MmZjOTM4OTQ2YmZiODE3OWM2YSIsCiAgInByb2ZpbGVOYW1lIiA6ICJNdmFyYyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80NGIyNDY4NGQyZGFkZTBhMDYwMTdlNzI5M2M5ZTdlNjRhNTlhNmQ2YWU2M2ExMTA3MmMwNzhhMDUyYWFjM2Q2IiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0=";
         String ironOre = "ewogICJ0aW1lc3RhbXAiIDogMTY3OTIzMjYzMzU4MiwKICAicHJvZmlsZUlkIiA6ICJhYTk3N2E3ODk0NTE0ODdhOGZiOWVhYmI0NzcyYmNmMyIsCiAgInByb2ZpbGVOYW1lIiA6ICJiZXN0c3VuZyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS82NzBjZGYwMzFjYzllMzc5MjcyMjhhMmU5NTMyNGEzNzViZThhZmU1ZTMwZTE5M2Y5NTIzMzI3MTk3YWI1Y2UwIgogICAgfQogIH0KfQ";
         String knightTemplar = "ewogICJ0aW1lc3RhbXAiIDogMTY3OTgyNDY2OTQ1OSwKICAicHJvZmlsZUlkIiA6ICI1ODkwNjAyNDYyMzE0ZGFjODM0NWQ3YjI4MmExZDI4ZiIsCiAgInByb2ZpbGVOYW1lIiA6ICJXeW5uY3JhZnRHYW1pbmciLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWIxMzExNGI2NjhiZDljMTU0Mjk0MTA4MWE3NGY3MjUwOWZlMmI4NjhhODY2MWU0YmJjYTY4OGViYzk3MmY4NCIKICAgIH0KICB9Cn0";
         String boxerSteve = "ewogICJ0aW1lc3RhbXAiIDogMTYyNjY0NDY4NDI3OCwKICAicHJvZmlsZUlkIiA6ICIyZjllYWI5OGNmZmE0ZWQ1YmU4ZTMwYTc2OTM2MmFkYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJFeHBhbmREb25nNSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9iMjI2Nzk3ZjNkNGU5MjAxMTllMWE4NzBmZTRhZjFmZTViYWIwMDUxMzQ2MzkwMDRjOTQ0Mjk3YjU4MGIwY2U2IgogICAgfQogIH0KfQ";
-        MenuV2 selectMenu = new MenuV2("Choose Selection")
-                .addItem(new SkullBuilder(amongUsCharacter).name("&aRandom").slot(10).leftClickAction(event -> {
-                    instance.getMenuManager().open(demoMenu, player);
+        String edmond = "ewogICJ0aW1lc3RhbXAiIDogMTYzNjM2MTU3NjAxMiwKICAicHJvZmlsZUlkIiA6ICJkODAwZDI4MDlmNTE0ZjkxODk4YTU4MWYzODE0Yzc5OSIsCiAgInByb2ZpbGVOYW1lIiA6ICJ0aGVCTFJ4eCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80ZGZhZjc2YTdhODBhMzAyZTc3NWRlYmY5OWQ4YTM3ZGI4MjdiNTE3YzNkMWRlMGI5NDk3N2U0YzAxZDRjNGM0IgogICAgfQogIH0KfQ==";
+        String gift = "ewogICJ0aW1lc3RhbXAiIDogMTY2NjcwMDQ4NDAwMCwKICAicHJvZmlsZUlkIiA6ICIwMzdlNzQwNGMyMjk0OTIxOTdkZjBlZWJmYWIyNTNjMiIsCiAgInByb2ZpbGVOYW1lIiA6ICJMX0FfWl9FX1JfIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzQwYzAwNzE2MjYxMzBlMmVkYjIyNGRkZWE1MjYwOWNjOTNjYWY0NzFlOTk1ODRhOGVjMjRmMTQ1MGQxYmE3MWYiCiAgICB9CiAgfQp9";
+        MenuV2 selectMenu = new MenuV2("Choose Selection", InventoryType.CHEST,36);
+                selectMenu.addItem(new SkullBuilder(amongUsCharacter).name("&aRandom").slot(10).leftClickAction(event -> {
+                    instance.getMenuManager().open(demoMenu, player, selectMenu);
                 }))
                 .addItem(new SkullBuilder(ironOre).name("&aMaterials").slot(12).leftClickAction(event -> {
-                    instance.getMenuManager().open(materialsMenu, player);
+                    instance.getMenuManager().open(materialsMenu, player, selectMenu);
                 }))
-                .addItem(new SkullBuilder(boxerSteve).name("&aLegacy Console Default Skins").slot(14).leftClickAction(event -> {
-                    instance.getMenuManager().open(skinPackDefaultMenu, player);
+                .addItem(new SkullBuilder(boxerSteve).name("&aDefault Skins (Legacy Console)").slot(14).leftClickAction(event -> {
+                    instance.getMenuManager().open(skinPackDefaultMenu, player, selectMenu);
                 }))
-                .addItem(new SkullBuilder(knightTemplar).name("&aLegacy Console Skin Pack One").slot(16).leftClickAction(event -> {
-                    instance.getMenuManager().open(skinPackOneMenu, player);
+                .addItem(new SkullBuilder(knightTemplar).name("&aSkin Pack One (Legacy Console)").slot(16).leftClickAction(event -> {
+                    instance.getMenuManager().open(skinPackOneMenu, player, selectMenu);
+                }))
+                .addItem(new SkullBuilder(gift).name("&aOur Gift to You by 57Digital").slot(21).leftClickAction(event -> {
+                    instance.getMenuManager().open(ourGiftToYouMenu, player, selectMenu);
+                }))
+                .addItem(new SkullBuilder(edmond).name("&aSpecial").slot(23).leftClickAction(event -> {
+                    instance.getMenuManager().open(specialMenu, player, selectMenu);
                 }));
         instance.getMenuManager().open(selectMenu, player);
     }
@@ -70,6 +87,7 @@ public class SelectSCmd extends CustomCommand {
             if (costume.hasDescription()) {
                 item.lore(List.of(new BukkitMsgBuilder(costume.getDescription()).get()));
             }
+            item.addLore(new BukkitMsgBuilder("&7").get(),new BukkitMsgBuilder("&7Click to apply skin").get());
             menu.addItem(item.leftClickAction(event -> {
                 PlayerUtils.setSkin(player, costume.getValue(),costume.getSignature());
             }));

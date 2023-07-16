@@ -1,7 +1,6 @@
 package me.itsmcb.drusk;
 
 import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
-import me.itsmcb.drusk.features.tab.TabFeat;
 import me.itsmcb.drusk.features.book.BookFeat;
 import me.itsmcb.drusk.features.creative.CreativeFeat;
 import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
@@ -11,6 +10,7 @@ import me.itsmcb.drusk.features.gamemode.GamemodeFeat;
 import me.itsmcb.drusk.features.head.HeadFeat;
 import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
 import me.itsmcb.drusk.features.inventory.InventoryFeat;
+import me.itsmcb.drusk.features.item.ItemFeat;
 import me.itsmcb.drusk.features.msg.MsgFeat;
 import me.itsmcb.drusk.features.skin.DruskCostume;
 import me.itsmcb.drusk.features.skin.SkinFeature;
@@ -18,7 +18,9 @@ import me.itsmcb.drusk.features.spawn.SpawnFeature;
 import me.itsmcb.drusk.features.specialevents.SpecialEventsFeature;
 import me.itsmcb.drusk.features.specialitems.SpecialItemsFeat;
 import me.itsmcb.drusk.features.status.StatusFeature;
+import me.itsmcb.drusk.features.tab.TabFeat;
 import me.itsmcb.drusk.features.teleport.TeleportFeat;
+import me.itsmcb.drusk.features.teleport.TeleportRequestManager;
 import me.itsmcb.drusk.features.tools.ToolsFeature;
 import me.itsmcb.drusk.features.weext.WorldEditExtensionsFeat;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
@@ -75,6 +77,12 @@ public final class Drusk extends JavaPlugin {
 
     private File textsFile = Path.of(getDataFolder() + File.separator + "texts").toFile();
 
+   TeleportRequestManager teleportRequestManager;
+
+    public TeleportRequestManager getTeleportRequestManager() {
+        return teleportRequestManager;
+    }
+
     public void resetManagers() {
         mainConfig.reload();
         costumes.reload();
@@ -130,9 +138,12 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new SpecialItemsFeat(instance));
         bukkitFeatureManager.register(new GamemodeFeat(instance));
         bukkitFeatureManager.register(new CreativeFeat(instance));
+        bukkitFeatureManager.register(new ItemFeat(instance));
         //bukkitFeatureManager.register(new DoubleJumpFeature(instance));
         //bukkitFeatureManager.register(new PlaceFlag(instance));
         //bukkitFeatureManager.register(new KaboomFeat(instance));
         resetManagers();
+
+        teleportRequestManager = new TeleportRequestManager(this);
     }
 }

@@ -1,6 +1,7 @@
 package me.itsmcb.drusk.features.skin;
 
 import me.itsmcb.drusk.Drusk;
+import me.itsmcb.drusk.features.skin.copy.CopySCmd;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.PlayerUtils;
@@ -20,7 +21,7 @@ public class SkinCMD extends CustomCommand {
         this.instance = instance;
         registerSubCommand(new CopySCmd(instance));
         registerSubCommand(new SelectSCmd(instance));
-        registerSubCommand(new UsernameSCmd(instance));
+        registerSubCommand(new SaveSCmd(instance));
         addParameter("reset", "Resets skin to default.");
     }
 

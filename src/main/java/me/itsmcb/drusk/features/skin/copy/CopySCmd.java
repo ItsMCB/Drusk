@@ -1,4 +1,4 @@
-package me.itsmcb.drusk.features.skin;
+package me.itsmcb.drusk.features.skin.copy;
 
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
@@ -13,5 +13,6 @@ public class CopySCmd extends CustomCommand {
         registerSubCommand(new TargetSCmd(instance));
         registerSubCommand(new OnlineSCmd(instance));
         registerSubCommand(new UsernameSCmd(instance));
+        registerSubCommand(new HandScmd(instance));
     }
 }

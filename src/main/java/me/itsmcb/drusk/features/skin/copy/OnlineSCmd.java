@@ -1,4 +1,4 @@
-package me.itsmcb.drusk.features.skin;
+package me.itsmcb.drusk.features.skin.copy;
 
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
@@ -40,14 +40,13 @@ public class OnlineSCmd extends CustomCommand {
         MenuV2 menu = new MenuV2("Select Player To Copy");
         // Filter command executor
         Bukkit.getOnlinePlayers().stream().filter(onlinePlayer -> onlinePlayer.getUniqueId() != player.getUniqueId()).forEach(onlinePlayer -> {
-            menu.addItem(new SkullBuilder(onlinePlayer).name("&d&l"+onlinePlayer.getName()).lore(new BukkitMsgBuilder("&7Click to copy skin!").get()).leftClickAction(event -> {
+            menu.addItem(new SkullBuilder(onlinePlayer).name("&d&l"+onlinePlayer.getName()).addLore(new BukkitMsgBuilder("&7Click to copy skin!").get()).leftClickAction(event -> {
                 PlayerUtils.copy(onlinePlayer,player);
             }));
         });
         instance.getMenuManager().open(menu, player);
     }
 
-    // TODO figure out why this completion doesn't work
     @Override
     public List<String> getAdditionalCompletions(CommandSender sender) {
         return BukkitUtils.getOnlinePlayerNames();

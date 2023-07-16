@@ -1,4 +1,4 @@
-package me.itsmcb.drusk.features.skin;
+package me.itsmcb.drusk.features.skin.copy;
 
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;

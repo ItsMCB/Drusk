@@ -28,6 +28,13 @@ repositories {
     maven {
         url = "https://maven.playpro.com/"
     }
+    // Geyser
+    repositories {
+        maven {
+            url = uri("https://repo.opencollab.dev/main/")
+        }
+    }
+
 }
 
 dependencies {
@@ -47,6 +54,12 @@ dependencies {
     compileOnly "net.coreprotect:coreprotect:21.3"
     // VexelCore
     compileOnly files('/home/martin/GitHub/VexelCore/bukkit/build/libs/VexelCore-Bukkit-1.0.1-SNAPSHOT.jar')
+    // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0'
+    // Geyser Floodgate
+    compileOnly('org.geysermc.floodgate:api:2.2.2-SNAPSHOT')
 }
 
 def targetJavaVersion = 17

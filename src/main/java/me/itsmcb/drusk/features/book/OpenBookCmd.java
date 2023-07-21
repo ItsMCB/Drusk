@@ -1,5 +1,7 @@
 package me.itsmcb.drusk.features.book;
 
+import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.geysermc.floodgate.api.FloodgateApi;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +40,25 @@ public class OpenBookCmd extends CustomCommand {
             new BukkitMsgBuilder("&cPlease provide a file name!").send(player);
             return;
         }
-        Optional<BoostedConfig> textConfig = instance.getTexts().stream().filter(text -> text.getFileName().equals(args[0])).findFirst();
-        if (textConfig.isEmpty()) {
+        Optional<String> file = instance.getTexts().stream().filter(text -> text.equals(args[0])).findFirst();
+        if (file.isEmpty()) {
             new BukkitMsgBuilder("&cText could not be found!").send(player);
             return;
         }
+        BoostedConfig config = new BoostedConfig(new File(instance.getDataFolder() + File.separator + "texts"), file.get(), null, new SpigotSerializer());
+
         // Check if sections exist
-        List<List<BukkitMsgBuilder>> sections = (List<List<BukkitMsgBuilder>>) textConfig.get().get().getList("sections");
+        // TODO for some reason placeholders are changed
+        List<List<BukkitMsgBuilder>> sections = (List<List<BukkitMsgBuilder>>) config.get().getList("sections");
+
+        // Parse placeholders if PAPI is installed
+        List<List<BukkitMsgBuilder>> finalSections = sections.stream().map(s -> s.stream().map(ss -> (PluginUtils.pluginIsLoaded("PlaceholderAPI") ? ss.messageText(PlaceholderAPI.setPlaceholders(player,ss.getMessageText())) : ss)).toList()).toList();
+        System.out.println("AFTER");
+        finalSections.forEach(s -> {
+            s.forEach(ss -> {
+                System.out.println(ss.getMessageText());
+            });
+        });
 
         // Check if Bedrock player or not and send data differently accordingly
         if (PluginUtils.pluginIsLoaded("floodgate")) {
@@ -51,7 +66,7 @@ public class OpenBookCmd extends CustomCommand {
             if (api.isFloodgatePlayer(player.getUniqueId())) {
                 // Send as menu because Geyser players don't support virtual books
                 MenuV2 menu = new PaginatedMenu("Click Paper to View Text in Chat",36,player);
-                sections.forEach(section -> {
+                finalSections.forEach(section -> {
                     ArrayList<TextComponent> components = new ArrayList<>();
                     section.forEach(subsection -> {
                         components.add(subsection.get());
@@ -73,7 +88,7 @@ public class OpenBookCmd extends CustomCommand {
         bookMeta.title(new BukkitMsgBuilder("Title").get());
         bookMeta.author(new BukkitMsgBuilder("Author").get());
 
-        sections.forEach(section -> {
+        finalSections.forEach(section -> {
             AtomicReference<TextComponent> textComponent = new AtomicReference<>(Component.text(""));
             section.forEach(component -> {
                 textComponent.set(textComponent.get().append(component.get()));
@@ -87,6 +102,6 @@ public class OpenBookCmd extends CustomCommand {
 
     @Override
     public List<String> getAdditionalCompletions(CommandSender sender) {
-        return instance.getTexts().stream().map(BoostedConfig::getFileName).toList();
+        return instance.getTexts();
     }
 }

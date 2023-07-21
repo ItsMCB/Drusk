@@ -27,6 +27,7 @@ tab:
     - "&7Online: &d%server_online% &8| &7Global: &d%bungee_total%"
     - ''
 spawn:
+  first-join-location: null
   location: null
 
 events:

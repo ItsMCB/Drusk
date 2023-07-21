@@ -34,7 +34,7 @@ public class MsgCmd extends CustomCommand {
         String formattedMessage = "&d&l"+player.getName()+" &8-> &d&l"+targetPlayer.getName()+"&8: &7"+message;
         // Cancel message if target player is sender
         if (player == targetPlayer) {
-            new BukkitMsgBuilder("&cWhy are you trying to send yourself a private message?").send(player);
+            new BukkitMsgBuilder("&7Why are you trying to send yourself a private message?").send(player);
             return;
         }
         // Cancel message if it has no length

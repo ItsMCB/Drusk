@@ -45,7 +45,7 @@ public final class Drusk extends JavaPlugin {
 
     private BoostedConfig mainConfig;
 
-    private ArrayList<BoostedConfig> texts = new ArrayList<>();
+    private ArrayList<String> texts = new ArrayList<>();
 
     private BoostedConfig costumes;
 
@@ -67,7 +67,7 @@ public final class Drusk extends JavaPlugin {
         return mainConfig;
     }
 
-    public ArrayList<BoostedConfig> getTexts() {
+    public ArrayList<String> getTexts() {
         return texts;
     }
 
@@ -90,9 +90,8 @@ public final class Drusk extends JavaPlugin {
         textsFile.mkdirs();
         texts.clear();
         for (File file : textsFile.listFiles()) {
-            texts.add(new BoostedConfig(textsFile, file.getName().substring(0,file.getName().lastIndexOf(".")), getResource("welcome.yml"), new SpigotSerializer()));
+            texts.add(file.getName().substring(0,file.getName().lastIndexOf(".")));
         }
-
         // Features
         bukkitFeatureManager.reload();
         menuManager = new MenuV2Manager(this);
@@ -104,7 +103,7 @@ public final class Drusk extends JavaPlugin {
         // Config
         mainConfig = new BoostedConfig(getDataFolder(),"config", getResource("config.yml"), new SpigotSerializer());
         ConfigurationSerialization.registerClass(BukkitMsgBuilder.class, "BukkitMsgBuilder");
-        texts.add(new BoostedConfig(textsFile, "welcome", getResource("welcome.yml"), new SpigotSerializer()));
+        //texts.add(new BoostedConfig(textsFile, "welcome", getResource("welcome.yml"), new SpigotSerializer()));
         ConfigurationSerialization.registerClass(DruskCostume.class, "Costume");
         costumes = new BoostedConfig(getDataFolder(), "costumes", getResource("costumes.yml"), new SpigotSerializer());
 

@@ -6,6 +6,7 @@ import me.itsmcb.vexelcore.bukkit.BukkitFeature;
 import me.itsmcb.vexelcore.bukkit.VexelCoreRunnable;
 import me.itsmcb.vexelcore.bukkit.VexelCoreRunnableInfo;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
+import me.itsmcb.vexelcore.bukkit.api.utils.PluginUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -17,7 +18,7 @@ public class TabFeat extends BukkitFeature {
     private Drusk instance;
 
     public TabFeat(Drusk instance) {
-        super("tab","Tab feature","tab", instance);
+        super("tab","Tab list","tab", instance);
         this.instance = instance;
         // TODO register Runnable so that it can be disabled, reloaded, etc.
     }
@@ -30,8 +31,8 @@ public class TabFeat extends BukkitFeature {
             @Override
             public void run() {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    Component header = new BukkitMsgBuilder(PlaceholderAPI.setPlaceholders(player, top)).get();
-                    Component footer = new BukkitMsgBuilder(PlaceholderAPI.setPlaceholders(player, bottom)).get();
+                    Component header = new BukkitMsgBuilder(PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(player, top) : top).get();
+                    Component footer = new BukkitMsgBuilder(PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(player, bottom) : bottom).get();
                     player.sendPlayerListHeaderAndFooter(header, footer);
                 }
             }

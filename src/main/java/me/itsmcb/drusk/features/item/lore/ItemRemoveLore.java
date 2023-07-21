@@ -40,7 +40,7 @@ public class ItemRemoveLore extends CustomCommand {
         components.remove(line);
         meta.lore(components);
         item.setItemMeta(meta);
-        new BukkitMsgBuilder("&7Removed lore line of &d"+item.getType().name()).send(player);
+        new BukkitMsgBuilder("&7Removed lore line from &d"+item.getType().name()).send(player);
     }
 
     @Override

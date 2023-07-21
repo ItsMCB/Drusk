@@ -41,6 +41,9 @@ public class PlayerSCMD extends CustomCommand {
                             selectedPlayer.getName() + " &7- &e&l" +
                             TimeUtils.formatSecondsToTime(selectedPlayer.getStatistic(Statistic.TOTAL_WORLD_TIME)/20)
             ).send(player);
+            new BukkitMsgBuilder("&7- UUID: &e&l"+selectedPlayer.getUniqueId())
+                    .hover("&7Click to copy")
+                    .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,selectedPlayer.getUniqueId()+"").send(player);
             if (selectedPlayer instanceof Player onlinePlayer) {
                 new BukkitMsgBuilder(
                         "&7- &e" + onlinePlayer.getClientBrandName() + "&7, &e" + onlinePlayer.getPing()+"ms"
@@ -87,7 +90,7 @@ public class PlayerSCMD extends CustomCommand {
             int x = parseResult.getX();
             int y = parseResult.getY();
             int z = parseResult.getZ();
-            new BukkitMsgBuilder("  &7- &d"+parseResult.getBlockData().getMaterial().getKey()+" &7- &e@ "+x+" "+y+" "+z)
+            new BukkitMsgBuilder("  &7- &d"+parseResult.getType().name()+" &7- &e@ "+x+" "+y+" "+z)
                     .hover("&7Click to teleport")
                     .clickEvent(ClickEvent.Action.RUN_COMMAND,"/teleport "+x+" "+y+" "+z)
                     .send(player);

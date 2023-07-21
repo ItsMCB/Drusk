@@ -3,6 +3,7 @@ package me.itsmcb.drusk.features.specialevents;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
+import me.itsmcb.vexelcore.bukkit.api.utils.PluginUtils;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.TextComponent;
@@ -34,14 +35,19 @@ public class SpecialEventsListener implements Listener {
         if (message != null) {
             event.joinMessage(message);
         }
-        // Teleport to spawn
-        if (instance.getMainConfig().get().getBoolean("events.join.spawn-teleport.on-join")) {
-            teleportToSpawn(player);
-        } else {
-            if (!event.getPlayer().hasPlayedBefore() && instance.getMainConfig().get().getBoolean("events.join.spawn-teleport.on-first-join")) {
+        // If first join, teleport to first join location. If not set, teleport to regular spawn. If not set, don't teleport.
+        if (player.hasPlayedBefore()) {
+            // Regular
+            if (instance.getMainConfig().get().getBoolean("events.join.spawn-teleport.on-join")) {
                 teleportToSpawn(player);
             }
+        } else {
+            // First join
+            if (instance.getMainConfig().get().getBoolean("events.join.spawn-teleport.on-first-join")) {
+                teleportToFirstJoin(player);
+            }
         }
+
         // Title
         // TODO when title is blank don't send a message
         TextComponent titleMessage = new BukkitMsgBuilder(instance.getMainConfig().get().getString("events.join.title.title-message")).get();
@@ -80,8 +86,9 @@ public class SpecialEventsListener implements Listener {
         Player player = event.getPlayer();
         if (!event.isCancelled() && instance.getMainConfig().get().getBoolean("events.death.enabled")) {
             // TODO blank string don't send
+            String message = instance.getMainConfig().get().getString("events.death.message");
             event.deathMessage(new BukkitMsgBuilder(
-                    PlaceholderAPI.setPlaceholders(player, instance.getMainConfig().get().getString("events.death.message"))
+                    PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(player, message) : message
             ).get());
         }
     }
@@ -92,7 +99,7 @@ public class SpecialEventsListener implements Listener {
             // Return message
             String message = instance.getMainConfig().get().getString("events."+type+".message");
             return new BukkitMsgBuilder(
-                    PlaceholderAPI.setPlaceholders(player, message)
+                    PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(player, message) : message
             ).get();
         }
         // Return null if there is no new message to get
@@ -104,7 +111,17 @@ public class SpecialEventsListener implements Listener {
             Location spawn = (Location) instance.getMainConfig().get().get("spawn.location", Location.class);
             player.teleport(spawn);
         } catch (Exception e) {
-            System.out.println("WARNING: Spawn location not set! Can't teleport player to spawn because of this issue..");
+            System.out.println("WARNING: Spawn location not set! Can't teleport player to spawn because of this issue.");
+        }
+    }
+
+    private void teleportToFirstJoin(Player player) {
+        try {
+            Location spawn = (Location) instance.getMainConfig().get().get("spawn.first-join-location", Location.class);
+            player.teleport(spawn);
+        } catch (Exception e) {
+            System.out.println("WARNING: Spawn location for first join not set! Teleporting player to regular spawn...");
+            teleportToSpawn(player);
         }
     }
 }

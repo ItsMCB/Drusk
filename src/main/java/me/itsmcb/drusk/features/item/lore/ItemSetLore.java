@@ -47,7 +47,7 @@ public class ItemSetLore extends CustomCommand {
         }
         meta.lore(components);
         item.setItemMeta(meta);
-        new BukkitMsgBuilder("&7Set lore line of &d"+item.getType().name()+" &7to &d"+component.content()).send(player);
+        new BukkitMsgBuilder("&7Set new lore line of &d"+item.getType().name()).send(player);
     }
 
     @Override

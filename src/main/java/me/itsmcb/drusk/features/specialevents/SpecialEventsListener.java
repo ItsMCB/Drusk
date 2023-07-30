@@ -48,27 +48,30 @@ public class SpecialEventsListener implements Listener {
             }
         }
 
-        // Title
-        // TODO when title is blank don't send a message
-        TextComponent titleMessage = new BukkitMsgBuilder(instance.getMainConfig().get().getString("events.join.title.title-message")).get();
-        TextComponent subtitleMessage = new BukkitMsgBuilder(instance.getMainConfig().get().getString("events.join.title.subtitle-message")).get();
-        Duration fadeIn = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.fade-in"));
-        Duration stay = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.stay"));
-        Duration fadeOut = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.fade-out"));
-        Title title = Title.title(titleMessage, subtitleMessage, Title.Times.times(fadeIn, stay, fadeOut));
-        player.showTitle(title);
+        // Title and sound
+        if (instance.getMainConfig().get().getBoolean("events.join.enabled")) {
+            // Title
+            // TODO when title is blank don't send a message
+            TextComponent titleMessage = new BukkitMsgBuilder(instance.getMainConfig().get().getString("events.join.title.title-message")).get();
+            TextComponent subtitleMessage = new BukkitMsgBuilder(instance.getMainConfig().get().getString("events.join.title.subtitle-message")).get();
+            Duration fadeIn = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.fade-in"));
+            Duration stay = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.stay"));
+            Duration fadeOut = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.fade-out"));
+            Title title = Title.title(titleMessage, subtitleMessage, Title.Times.times(fadeIn, stay, fadeOut));
+            player.showTitle(title);
 
-        // Play sound
-        // TODO make configurable
-        Sound sound = Sound.sound(Key.key("block.note_block.bit"), Sound.Source.MASTER, 1f, 1f);
-        player.playSound(sound);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Sound sound = Sound.sound(Key.key("block.note_block.bit"), Sound.Source.MASTER, 1f, 0.1f);
-                player.playSound(sound);
-            }
-        }.runTaskLater(instance, 20L);
+            // Play sound
+            // TODO make configurable
+            Sound sound = Sound.sound(Key.key("block.note_block.bit"), Sound.Source.MASTER, 1f, 1f);
+            player.playSound(sound);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Sound sound = Sound.sound(Key.key("block.note_block.bit"), Sound.Source.MASTER, 1f, 0.1f);
+                    player.playSound(sound);
+                }
+            }.runTaskLater(instance, 20L);
+        }
 
     }
 

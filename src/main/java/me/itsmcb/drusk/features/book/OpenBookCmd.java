@@ -53,12 +53,6 @@ public class OpenBookCmd extends CustomCommand {
 
         // Parse placeholders if PAPI is installed
         List<List<BukkitMsgBuilder>> finalSections = sections.stream().map(s -> s.stream().map(ss -> (PluginUtils.pluginIsLoaded("PlaceholderAPI") ? ss.messageText(PlaceholderAPI.setPlaceholders(player,ss.getMessageText())) : ss)).toList()).toList();
-        System.out.println("AFTER");
-        finalSections.forEach(s -> {
-            s.forEach(ss -> {
-                System.out.println(ss.getMessageText());
-            });
-        });
 
         // Check if Bedrock player or not and send data differently accordingly
         if (PluginUtils.pluginIsLoaded("floodgate")) {

@@ -107,6 +107,7 @@ public class SelectSCmd extends CustomCommand {
             item.addLore(new BukkitMsgBuilder("&7").get(),new BukkitMsgBuilder("&7Click to apply skin").get());
             menu.addItem(item.leftClickAction(event -> {
                 PlayerUtils.setSkin(player, costume.getValue(),costume.getSignature());
+                new BukkitMsgBuilder("&7Now wearing skin &d"+costume.getName()).send(player);
             }));
         });
     }

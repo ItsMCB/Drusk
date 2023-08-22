@@ -1,31 +1,42 @@
 package me.itsmcb.drusk.features.specialitems;
 
-import org.bukkit.Axis;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import me.itsmcb.drusk.Drusk;
+import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
+import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Item;
+import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.Campfire;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Smoker;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.Orientable;
+import org.bukkit.block.data.Snowable;
+import org.bukkit.block.data.type.Light;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class SpecialItemsListener implements Listener {
 
+    private Drusk instance;
     private NamespacedKey key;
 
-    public SpecialItemsListener(NamespacedKey key) {
+    public SpecialItemsListener(Drusk instance, NamespacedKey key) {
+        this.instance = instance;
         this.key = key;
     }
 
@@ -76,6 +87,50 @@ public class SpecialItemsListener implements Listener {
                 campfire.setBlockData(blockData);
                 campfire.update(true,false);
             }
+            if (data.equals("snowy_grass")) {
+                Block block = event.getBlock();
+                BlockData blockData = event.getBlock().getBlockData();
+                ((Snowable) blockData).setSnowy(true);
+                block.setBlockData(blockData);
+            }
+        }
+    }
+
+    @EventHandler
+    public void itemClick(PlayerInteractEvent event) {
+        Action action = event.getAction();
+        ItemStack itemStack = event.getItem();
+        if (itemStack == null) {
+            return;
+        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) {
+            return;
+        }
+        int heldSlot = event.getPlayer().getInventory().getHeldItemSlot();
+        // Light Block
+        if (action.equals(Action.RIGHT_CLICK_AIR) && itemStack.getType().equals(Material.LIGHT)) {
+            MenuV2 menu = new MenuV2("&3Set Light Amount", InventoryType.CHEST,18).clickCloseMenu(true);
+            for (int i = 1; i < 16; i++) {
+                int finalI = i;
+                MenuV2Item givenItem = new MenuV2Item(Material.LIGHT).name("&d&lLevel "+i);
+                ItemMeta menuItemStackMeta = givenItem.getItemMeta();
+                BlockDataMeta blockDataMeta = (BlockDataMeta) menuItemStackMeta;
+                BlockData blockData = givenItem.getType().createBlockData();
+                ((Light) blockData).setLevel(i);
+                blockDataMeta.setBlockData(blockData);
+                givenItem.setItemMeta(blockDataMeta);
+
+                MenuV2Item item = givenItem.addLore("&7Edit the light level of your current light block.").leftClickAction(e -> {
+                    if (e.getCurrentItem() == null) {
+                        return;
+                    }
+                    event.getPlayer().getInventory().setItem(heldSlot, givenItem);
+                    new BukkitMsgBuilder("&7Set light level to &3"+finalI).send(event.getPlayer());
+                });
+                menu.addItem(item);
+            }
+            instance.getMenuManager().open(menu, event.getPlayer());
         }
     }
 

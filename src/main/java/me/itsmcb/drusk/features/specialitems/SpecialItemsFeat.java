@@ -12,6 +12,6 @@ public class SpecialItemsFeat extends BukkitFeature {
         super("Special Items", "Obtain special items", null, instance);
         specialItemPlacerKey = new NamespacedKey(instance, "special-item-placer");
         registerCommand(new SpecialItemsCmd(instance, specialItemPlacerKey));
-        registerListener(new SpecialItemsListener(specialItemPlacerKey));
+        registerListener(new SpecialItemsListener(instance, specialItemPlacerKey));
     }
 }

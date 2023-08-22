@@ -5,10 +5,19 @@ import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Item;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2ItemData;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Lightable;
+import org.bukkit.block.data.Snowable;
+import org.bukkit.block.data.type.Light;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.meta.BlockDataMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class SpecialItemsCmd extends CustomCommand {
 
@@ -39,8 +48,6 @@ public class SpecialItemsCmd extends CustomCommand {
         menu.addItem(debugStick.leftClickAction(event -> {
             player.getInventory().addItem(debugStick.getCleanItemStack());
         }));
-
-        // TODO Light block w/levels
 
         MenuV2Item itemFrame = new MenuV2Item(Material.ITEM_FRAME)
                 .name("&d&lInvisible Item Frame")
@@ -95,6 +102,25 @@ public class SpecialItemsCmd extends CustomCommand {
                 .addData(new MenuV2ItemData(specialItemKey,"nether_portal_z"));
         menu.addItem(obsidian2.leftClickAction(event -> {
             player.getInventory().addItem(obsidian2.getCleanItemStack());
+        }));
+
+        MenuV2Item light = new MenuV2Item(Material.LIGHT)
+                .name("&d&lLight 15")
+                .addData(new MenuV2ItemData(specialItemKey,"light"));
+        menu.addItem(light.leftClickAction(event -> {
+            player.getInventory().addItem(light.getCleanItemStack());
+        }));
+
+        // Snowy Grass
+        MenuV2Item snowyGrass = new MenuV2Item(Material.GRASS_BLOCK).name("&d&lSnowy Grass");
+        ItemMeta snowyGrassMeta = snowyGrass.getItemMeta();
+        BlockDataMeta snowyBlockMeta = (BlockDataMeta) snowyGrassMeta;
+        BlockData blockData = snowyGrass.getType().createBlockData();
+        ((Snowable) blockData).setSnowy(true);
+        snowyBlockMeta.setBlockData(blockData);
+        snowyGrass.setItemMeta(snowyBlockMeta);
+        menu.addItem(snowyGrass.leftClickAction(event -> {
+            player.getInventory().addItem(snowyGrass.getCleanItemStack());
         }));
 
         instance.getMenuManager().open(menu, player);

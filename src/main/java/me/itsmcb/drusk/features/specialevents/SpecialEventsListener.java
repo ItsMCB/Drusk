@@ -31,10 +31,7 @@ public class SpecialEventsListener implements Listener {
     public void Join(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         // Change join message
-        TextComponent message = getMessage("join", player);
-        if (message != null) {
-            event.joinMessage(message);
-        }
+        TextComponent message = getMessage("join","message", player);
         // If first join, teleport to first join location. If not set, teleport to regular spawn. If not set, don't teleport.
         if (player.hasPlayedBefore()) {
             // Regular
@@ -44,8 +41,12 @@ public class SpecialEventsListener implements Listener {
         } else {
             // First join
             if (instance.getMainConfig().get().getBoolean("events.join.spawn-teleport.on-first-join")) {
+                message = getMessage("join","first-join-message", player);
                 teleportToFirstJoin(player);
             }
+        }
+        if (message != null) {
+            event.joinMessage(message);
         }
 
         // Title and sound
@@ -78,7 +79,7 @@ public class SpecialEventsListener implements Listener {
     @EventHandler
     public void Leave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        TextComponent message = getMessage("leave", player);
+        TextComponent message = getMessage("leave","message", player);
         if (message != null) {
             event.quitMessage(message);
         }
@@ -96,11 +97,11 @@ public class SpecialEventsListener implements Listener {
         }
     }
 
-    private TextComponent getMessage(String type, Player player) {
+    private TextComponent getMessage(String type, String msg, Player player) {
         // Check if component is enabled
         if (instance.getMainConfig().get().getBoolean("events."+type+".enabled")) {
             // Return message
-            String message = instance.getMainConfig().get().getString("events."+type+".message");
+            String message = instance.getMainConfig().get().getString("events."+type+"."+msg);
             return new BukkitMsgBuilder(
                     PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(player, message) : message
             ).get();

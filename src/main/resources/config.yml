@@ -35,6 +35,7 @@ events:
     enabled: true
     # Leave empty to disable default message
     message: "&e%player_name% jumped into the server"
+    first-join-message: "&e%player_name% joined for the first time!"
     title:
       title-message: "&aLibre Galaxy"
       subtitle-message: "&eWelcome"
@@ -47,7 +48,7 @@ events:
   leave:
     enabled: true
     # Leave empty to disable default message
-    message: "&e%player_name% left the server to take a break"
+    message: "&e%player_name% had to leave"
   death:
     enabled: true
     # Leave empty to disable default message

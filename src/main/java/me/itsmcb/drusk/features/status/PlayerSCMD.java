@@ -36,7 +36,7 @@ public class PlayerSCMD extends CustomCommand {
         // Custom command to do: require arg
         if (cmdHelper.argExists(0)) {
             OfflinePlayer selectedPlayer = Bukkit.getOfflinePlayer(args[0]);
-            if (!(selectedPlayer.hasPlayedBefore())) {
+            if (!(selectedPlayer.hasPlayedBefore() || selectedPlayer.isOnline())) {
                 new BukkitMsgBuilder("&cPlayer hasn't played before!").send(player);
                 return;
             }

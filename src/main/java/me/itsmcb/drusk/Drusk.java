@@ -11,7 +11,7 @@ import me.itsmcb.drusk.features.head.HeadFeat;
 import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
 import me.itsmcb.drusk.features.inventory.InventoryFeat;
 import me.itsmcb.drusk.features.item.ItemFeat;
-import me.itsmcb.drusk.features.msg.MsgFeat;
+import me.itsmcb.drusk.features.talk.MsgFeat;
 import me.itsmcb.drusk.features.skin.DruskCostume;
 import me.itsmcb.drusk.features.skin.SkinFeature;
 import me.itsmcb.drusk.features.spawn.SpawnFeature;

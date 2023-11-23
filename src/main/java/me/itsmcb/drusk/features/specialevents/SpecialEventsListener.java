@@ -7,6 +7,7 @@ import me.itsmcb.vexelcore.bukkit.api.utils.PluginUtils;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -29,25 +30,25 @@ public class SpecialEventsListener implements Listener {
 
     @EventHandler
     public void Join(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        // Change join message
-        TextComponent message = getMessage("join","message", player);
-        // If first join, teleport to first join location. If not set, teleport to regular spawn. If not set, don't teleport.
-        if (player.hasPlayedBefore()) {
-            // Regular
-            if (instance.getMainConfig().get().getBoolean("events.join.spawn-teleport.on-join")) {
-                teleportToSpawn(player);
-            }
+        Player ep = event.getPlayer();
+        if (!instance.getMainConfig().get().getBoolean("events.join.enabled")) {
+            return;
+        }
+        BukkitMsgBuilder msg;
+        String text = instance.getMainConfig().get().getString("events.join.message");
+        if (!ep.hasPlayedBefore()) {
+            text = instance.getMainConfig().get().getString("events.join.first-join-message");
+            msg = new BukkitMsgBuilder(
+                    PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(ep, text) : text
+            ).hover("&7Click to send first join welcome message").clickEvent(ClickEvent.Action.RUN_COMMAND,"/say Welcome, "+ep.getName());
         } else {
-            // First join
-            if (instance.getMainConfig().get().getBoolean("events.join.spawn-teleport.on-first-join")) {
-                message = getMessage("join","first-join-message", player);
-                teleportToFirstJoin(player);
-            }
+            msg = new BukkitMsgBuilder(
+                    PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(ep, text) : text
+            ).hover("&7Click to send welcome back message").clickEvent(ClickEvent.Action.RUN_COMMAND,"/say wb "+ep.getName());
         }
-        if (message != null) {
-            event.joinMessage(message);
-        }
+        event.joinMessage(null);
+        msg.sendAllExcept(ep);
+        msg.hover("&7Click to say \"hi\"").clickEvent(ClickEvent.Action.RUN_COMMAND,"/say hi").sendOnly(ep);
 
         // Title and sound
         if (instance.getMainConfig().get().getBoolean("events.join.enabled")) {
@@ -59,17 +60,18 @@ public class SpecialEventsListener implements Listener {
             Duration stay = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.stay"));
             Duration fadeOut = Duration.ofSeconds(instance.getMainConfig().get().getInt("events.join.title.fade-out"));
             Title title = Title.title(titleMessage, subtitleMessage, Title.Times.times(fadeIn, stay, fadeOut));
-            player.showTitle(title);
+            ep.showTitle(title);
+
 
             // Play sound
             // TODO make configurable
             Sound sound = Sound.sound(Key.key("block.note_block.bit"), Sound.Source.MASTER, 1f, 1f);
-            player.playSound(sound);
+            ep.playSound(sound);
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     Sound sound = Sound.sound(Key.key("block.note_block.bit"), Sound.Source.MASTER, 1f, 0.1f);
-                    player.playSound(sound);
+                    ep.playSound(sound);
                 }
             }.runTaskLater(instance, 20L);
         }
@@ -96,7 +98,6 @@ public class SpecialEventsListener implements Listener {
             ).get());
         }
     }
-
     private TextComponent getMessage(String type, String msg, Player player) {
         // Check if component is enabled
         if (instance.getMainConfig().get().getBoolean("events."+type+".enabled")) {

@@ -1,11 +1,11 @@
-package me.itsmcb.drusk.features.msg;
+package me.itsmcb.drusk.features.talk;
 
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.common.api.command.CMDHelper;
-import net.kyori.adventure.text.TextComponent;
+import me.itsmcb.vexelcore.common.api.utils.ArgUtils;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -29,7 +29,8 @@ public class MsgCmd extends CustomCommand {
             new BukkitMsgBuilder("&cThat player isn't online.").send(player);
             return;
         }
-        String message = cmdHelper.getStringOfArgsAfterIndex(0);
+
+        String message = ArgUtils.mergeWithSpace(args,1);
         Player targetPlayer = Bukkit.getPlayer(args[0]);
         String formattedMessage = "&d&l"+player.getName()+" &8-> &d&l"+targetPlayer.getName()+"&8: &7"+message;
         // Cancel message if target player is sender
@@ -38,17 +39,17 @@ public class MsgCmd extends CustomCommand {
             return;
         }
         // Cancel message if it has no length
-        if (message.length() == 0) {
+        if (message.isEmpty()) {
             new BukkitMsgBuilder("&cMessage must have at least one character.").send(player);
             return;
         }
-        TextComponent component = new BukkitMsgBuilder(formattedMessage).hover("&7Click to reply").clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg "+player.getName()+" ").get();
-
-        // Send message back to sender
-        player.sendMessage(component);
+        BukkitMsgBuilder msg = new BukkitMsgBuilder(formattedMessage).hover("&7Click to message "+player.getName()).clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg "+player.getName()+" ");
 
         // Send message to target
-        targetPlayer.sendMessage(component);
+        targetPlayer.sendMessage(msg.get());
+
+        // Send message back to sender
+        player.sendMessage(msg.hover("&7Click to message "+targetPlayer.getName()).clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg "+targetPlayer.getName()+" ").get());
 
         // Send staff message for moderation purposes
         Bukkit.getOnlinePlayers().stream().filter(onlinePlayer -> (onlinePlayer.hasPermission("drusk.mod") && onlinePlayer != targetPlayer && onlinePlayer != player)).toList().forEach(onlinePlayer -> {

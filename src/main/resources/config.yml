@@ -37,8 +37,8 @@ events:
     message: "&e%player_name% jumped into the server"
     first-join-message: "&e%player_name% joined for the first time!"
     title:
-      title-message: "&aLibre Galaxy"
-      subtitle-message: "&eWelcome"
+      title-message: "&dʟɪʙʀᴇ ɢᴀʟᴀxʏ"
+      subtitle-message: "&3ᴡᴇʟᴄᴏᴍᴇ"
       fade-in: 1
       stay: 5
       fade-out: 1

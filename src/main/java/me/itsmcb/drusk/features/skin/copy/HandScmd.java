@@ -32,7 +32,7 @@ public class HandScmd extends CustomCommand {
         }
         skullMeta.getPlayerProfile().getProperties().forEach(profileProperty -> {
             if (profileProperty.getSignature() == null) {
-                new BukkitMsgBuilder("&cThe head doesn't have a valid signature attached.").send(player);
+                new BukkitMsgBuilder("&cThis head has a texture but not a signature. The latter is required in order for this head to be applied as a skin.").send(player);
                 return;
             }
             PlayerUtils.setSkin(player, profileProperty.getValue(), profileProperty.getSignature());

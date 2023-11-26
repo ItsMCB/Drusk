@@ -7,7 +7,6 @@ import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
 import me.itsmcb.drusk.features.flyspeed.FlySpeedFeat;
 import me.itsmcb.drusk.features.fun.FunFeat;
 import me.itsmcb.drusk.features.gamemode.GamemodeFeat;
-import me.itsmcb.drusk.features.head.HeadFeat;
 import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
 import me.itsmcb.drusk.features.inventory.InventoryFeat;
 import me.itsmcb.drusk.features.item.ItemFeat;
@@ -128,7 +127,6 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new InventoryFeat(instance));
         bukkitFeatureManager.register(new FlySpeedFeat(instance));
         bukkitFeatureManager.register(new WorldEditExtensionsFeat(instance));
-        bukkitFeatureManager.register(new HeadFeat(instance));
         bukkitFeatureManager.register(new TeleportFeat(instance));
         bukkitFeatureManager.register(new TabFeat(instance));
         bukkitFeatureManager.register(new MsgFeat(instance));

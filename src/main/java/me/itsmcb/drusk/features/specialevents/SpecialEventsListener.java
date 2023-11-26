@@ -41,10 +41,12 @@ public class SpecialEventsListener implements Listener {
             msg = new BukkitMsgBuilder(
                     PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(ep, text) : text
             ).hover("&7Click to send first join welcome message").clickEvent(ClickEvent.Action.RUN_COMMAND,"/say Welcome, "+ep.getName());
+            teleportToFirstJoin(ep);
         } else {
             msg = new BukkitMsgBuilder(
                     PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(ep, text) : text
             ).hover("&7Click to send welcome back message").clickEvent(ClickEvent.Action.RUN_COMMAND,"/say wb "+ep.getName());
+            teleportToSpawn(ep);
         }
         event.joinMessage(null);
         msg.sendAllExcept(ep);

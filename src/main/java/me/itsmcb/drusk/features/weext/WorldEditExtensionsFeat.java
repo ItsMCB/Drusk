@@ -8,5 +8,8 @@ public class WorldEditExtensionsFeat extends BukkitFeature {
     public WorldEditExtensionsFeat(Drusk instance) {
         super("World Edit Extensions", "World Edit extension", null, instance);
         registerCommand(new WCmd());
+        registerCommand(new PosCmd(1));
+        registerCommand(new PosCmd(2));
+        registerCommand(new WorldEditMenuCmd(instance));
     }
 }

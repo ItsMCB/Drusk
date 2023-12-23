@@ -25,6 +25,7 @@ public class TabFeat extends BukkitFeature {
 
     @Override
     public List<VexelCoreRunnableInfo> runnables() {
+        String name = instance.getMainConfig().get().getString("tab.name");
         String top = format(instance.getMainConfig().get().getStringList("tab.top"));
         String bottom = format(instance.getMainConfig().get().getStringList("tab.bottom"));
         VexelCoreRunnable runnable = new VexelCoreRunnable() {
@@ -34,6 +35,8 @@ public class TabFeat extends BukkitFeature {
                     Component header = new BukkitMsgBuilder(PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(player, top) : top).get();
                     Component footer = new BukkitMsgBuilder(PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(player, bottom) : bottom).get();
                     player.sendPlayerListHeaderAndFooter(header, footer);
+                    Component newName = new BukkitMsgBuilder(PluginUtils.pluginIsLoaded("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(player, name) : name).get();
+                    player.playerListName(newName);
                 }
             }
         };

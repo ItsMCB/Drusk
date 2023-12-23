@@ -12,10 +12,11 @@
 
 # The following lines with hashtags are comments designed to help you understand the options in this configuration file
 
-file-version: 1
+file-version: 2
 
 tab:
   enabled: true
+  name: "%luckperms_prefix%&f%player_name%"
   top:
     - '                                        '
     - "&d&lLibre Galaxy"

@@ -17,7 +17,7 @@ public class StorageSCmd extends CustomCommand {
     private Drusk instance;
 
     public StorageSCmd(Drusk instance) {
-        super("storage","View storage impact of files","drusk.admin");
+        super("storage","View the disk utilization of the server","drusk.admin");
         this.instance = instance;
     }
 
@@ -28,12 +28,15 @@ public class StorageSCmd extends CustomCommand {
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
-        new BukkitMsgBuilder("&7=== &3&lStorage &7===").send(player);
         File serverFolder = Bukkit.getServer().getPluginsFolder().getAbsoluteFile().getParentFile().getAbsoluteFile();
-        new BukkitMsgBuilder("&3Server Folder Size: " + FileUtils.getRecursiveFileSizeFormatted(serverFolder)).send(player);
-        new BukkitMsgBuilder(serverFolder.getAbsolutePath()).send(player);
-        new BukkitMsgBuilder("&3&lSystem").send(player);
-        new BukkitMsgBuilder("&aAvailable Disk Space: &e" + (FileUtils.getAvailableDiskSpaceBytes(FileUtils.getOSRoot())/1073741824) + "GB").send(player);
-        new BukkitMsgBuilder("&aTotal Disk Space: &e" + (FileUtils.getTotalDiskSpaceBytes(FileUtils.getOSRoot())/1073741824) + "GB").send(player);
+        new BukkitMsgBuilder("&8--=== &b&lStorage &8===--").hover("&7Path: &3"+serverFolder.getAbsolutePath()).send(player);
+        new BukkitMsgBuilder("&8&l- &3Folders").send(player);
+        new BukkitMsgBuilder("&7Root: &3" + FileUtils.getRecursiveFileSizeFormatted(serverFolder)).send(player);
+        new BukkitMsgBuilder("&7Plugins: &3" + FileUtils.getRecursiveFileSizeFormatted(Bukkit.getServer().getPluginsFolder())).send(player);
+        new BukkitMsgBuilder("&8&l- &3System").send(player);
+        long totalGB = FileUtils.getTotalDiskSpaceBytes(FileUtils.getOSRoot())/1073741824;
+        long availableGB = FileUtils.getAvailableDiskSpaceBytes(FileUtils.getOSRoot())/1073741824;
+        new BukkitMsgBuilder("&7Available Disk Space: &3" + availableGB + " GB").send(player);
+        new BukkitMsgBuilder("&7Total Disk Space: &3" + totalGB + " GB").send(player);
     }
 }

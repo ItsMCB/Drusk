@@ -6,8 +6,10 @@ import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.common.api.command.CMDHelper;
 import me.itsmcb.vexelcore.common.api.utils.ArgUtils;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -47,6 +49,7 @@ public class MsgCmd extends CustomCommand {
 
         // Send message to target
         targetPlayer.sendMessage(msg.get());
+        targetPlayer.playSound(player.getLocation(), Sound.ENTITY_SILVERFISH_AMBIENT, 1, -1);
 
         // Send message back to sender
         player.sendMessage(msg.hover("&7Click to message "+targetPlayer.getName()).clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg "+targetPlayer.getName()+" ").get());

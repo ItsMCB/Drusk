@@ -42,19 +42,19 @@ public class SelectSCmd extends CustomCommand {
         MenuV2 materialsMenu = new PaginatedMenu("Materials",36, player);
         addSkins(materialCostumes, materialsMenu, player);
 
-        MenuV2 skinPackDefaultMenu = new PaginatedMenu("Default (LC)",36, player);
+        MenuV2 skinPackDefaultMenu = new PaginatedMenu("Default",36, player);
         addSkins(skinPackDefault, skinPackDefaultMenu, player);
 
-        MenuV2 summerOfArcadeMenu = new PaginatedMenu("Summer of Arcade (LC)",36, player);
+        MenuV2 summerOfArcadeMenu = new PaginatedMenu("Summer of Arcade",36, player);
         addSkins(summerOfArcade, summerOfArcadeMenu, player);
 
-        MenuV2 skinPackOneMenu = new PaginatedMenu("Skin Pack One (LC)",36, player);
+        MenuV2 skinPackOneMenu = new PaginatedMenu("Skin Pack One",36, player);
         addSkins(skinPackOne, skinPackOneMenu, player);
 
-        MenuV2 skinPackTwoMenu = new PaginatedMenu("Skin Pack Two (LC)",36, player);
+        MenuV2 skinPackTwoMenu = new PaginatedMenu("Skin Pack Two",36, player);
         addSkins(skinPackTwo, skinPackTwoMenu, player);
 
-        MenuV2 ourGiftToYouMenu = new PaginatedMenu("Our Gift to You by 57Digital",36, player);
+        MenuV2 ourGiftToYouMenu = new PaginatedMenu("Our Gift to You",36, player);
         addSkins(ourGiftToYou, ourGiftToYouMenu, player);
 
         MenuV2 specialMenu = new PaginatedMenu("Special",36, player);
@@ -70,7 +70,7 @@ public class SelectSCmd extends CustomCommand {
         String fidget = "ewogICJ0aW1lc3RhbXAiIDogMTU4OTUxNDExMzQ3OSwKICAicHJvZmlsZUlkIiA6ICI4MmM2MDZjNWM2NTI0Yjc5OGI5MWExMmQzYTYxNjk3NyIsCiAgInByb2ZpbGVOYW1lIiA6ICJOb3ROb3RvcmlvdXNOZW1vIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzE4Yjc5Njc2ZmMzYmI3Zjk3MjEwNTRkNTgwZGE4MzY5OTA0MzYwYWUzOTExYjIwMTRjYjgzZjg0ZmYwYTQwOCIKICAgIH0KICB9Cn0";
         String redKnight = "ewogICJ0aW1lc3RhbXAiIDogMTY4NzI3MTIyODkwMSwKICAicHJvZmlsZUlkIiA6ICJjYjYxY2U5ODc4ZWI0NDljODA5MzliNWYxNTkwMzE1MiIsCiAgInByb2ZpbGVOYW1lIiA6ICJWb2lkZWRUcmFzaDUxODUiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjQ5ZDZhNThlMmJkYWViOGQ2NjY3NmNlNzQ1NGQxNmMwYTdiYWFlYTViMjIzNmYxZDBiYjY2YWEyYWJkNzU3MCIKICAgIH0KICB9Cn0";
 
-        MenuV2 selectMenu = new MenuV2("Skin Packs", InventoryType.CHEST,36);
+        MenuV2 selectMenu = new MenuV2("Skin Packs", InventoryType.CHEST,27);
                 selectMenu.addItem(new SkullBuilder(amongUsCharacter).name("&aRandom").slot(2).leftClickAction(event -> {
                     instance.getMenuManager().open(demoMenu, player, selectMenu);
                 }))
@@ -80,19 +80,19 @@ public class SelectSCmd extends CustomCommand {
                 .addItem(new SkullBuilder(edmond).name("&aSpecial").slot(6).leftClickAction(event -> {
                     instance.getMenuManager().open(specialMenu, player, selectMenu);
                 }))
-                .addItem(new SkullBuilder(boxerSteve).name("&aDefault Skins (Legacy Console)").slot(10).leftClickAction(event -> {
+                .addItem(new SkullBuilder(boxerSteve).name("&aDefault").addLore("&7Legacy Console","&7Released July 13, 2012").slot(10).leftClickAction(event -> {
                     instance.getMenuManager().open(skinPackDefaultMenu, player, selectMenu);
                 }))
-                .addItem(new SkullBuilder(fidget).name("&aSummer of Arcade (Legacy Console)").slot(12).leftClickAction(event -> {
+                .addItem(new SkullBuilder(fidget).name("&aSummer of Arcade").addLore("&7Legacy Console").slot(12).leftClickAction(event -> {
                     instance.getMenuManager().open(summerOfArcadeMenu, player, selectMenu);
                 }))
-                .addItem(new SkullBuilder(knightTemplar).name("&aSkin Pack One (Legacy Console)").slot(14).leftClickAction(event -> {
+                .addItem(new SkullBuilder(knightTemplar).name("&aSkin Pack One").addLore("&7Legacy Console").slot(14).leftClickAction(event -> {
                     instance.getMenuManager().open(skinPackOneMenu, player, selectMenu);
                 }))
-                .addItem(new SkullBuilder(redKnight).name("&aSkin Pack Two (Legacy Console)").slot(16).leftClickAction(event -> {
+                .addItem(new SkullBuilder(redKnight).name("&aSkin Pack Two").addLore("&7Legacy Console").slot(16).leftClickAction(event -> {
                     instance.getMenuManager().open(skinPackTwoMenu, player, selectMenu);
                 }))
-                .addItem(new SkullBuilder(gift).name("&aOur Gift to You by 57Digital").slot(22).leftClickAction(event -> {
+                .addItem(new SkullBuilder(gift).name("&aOur Gift to You").addLore("&7Bedrock Marketplace &8| &757Digital").slot(22).leftClickAction(event -> {
                     instance.getMenuManager().open(ourGiftToYouMenu, player, selectMenu);
                 }));
         instance.getMenuManager().open(selectMenu, player);

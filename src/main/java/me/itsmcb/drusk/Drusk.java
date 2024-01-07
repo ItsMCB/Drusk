@@ -28,12 +28,15 @@ import me.itsmcb.vexelcore.bukkit.api.managers.PermissionManager;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Manager;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.common.api.config.BoostedConfig;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public final class Drusk extends JavaPlugin {
 
@@ -80,6 +83,12 @@ public final class Drusk extends JavaPlugin {
 
     public TeleportRequestManager getTeleportRequestManager() {
         return teleportRequestManager;
+    }
+
+    private HashMap<UUID, Location> lastTeleportLocation = new HashMap<>();
+
+    public HashMap<UUID, Location> getLastTeleportLocation() {
+        return lastTeleportLocation;
     }
 
     public void resetManagers() {

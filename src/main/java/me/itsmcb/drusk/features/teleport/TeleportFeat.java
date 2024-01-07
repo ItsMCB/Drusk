@@ -11,5 +11,7 @@ public class TeleportFeat extends BukkitFeature {
         registerCommand(new TpHereCmd());
         registerCommand(new TpmCmd(instance));
         registerCommand(new TopCmd());
+        registerCommand(new BackCmd(instance));
+        registerListener(new BackListener(instance));
     }
 }

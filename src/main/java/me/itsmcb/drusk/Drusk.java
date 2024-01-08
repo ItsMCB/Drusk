@@ -10,6 +10,7 @@ import me.itsmcb.drusk.features.gamemode.GamemodeFeat;
 import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
 import me.itsmcb.drusk.features.inventory.InventoryFeat;
 import me.itsmcb.drusk.features.item.ItemFeat;
+import me.itsmcb.drusk.features.notify.NotifyFeat;
 import me.itsmcb.drusk.features.talk.MsgFeat;
 import me.itsmcb.drusk.features.skin.DruskCostume;
 import me.itsmcb.drusk.features.skin.SkinFeature;
@@ -145,6 +146,7 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new GamemodeFeat(instance));
         bukkitFeatureManager.register(new CreativeFeat(instance));
         bukkitFeatureManager.register(new ItemFeat(instance));
+        bukkitFeatureManager.register(new NotifyFeat(instance));
         //bukkitFeatureManager.register(new DoubleJumpFeature(instance));
         //bukkitFeatureManager.register(new PlaceFlag(instance));
         //bukkitFeatureManager.register(new KaboomFeat(instance));

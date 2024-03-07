@@ -13,7 +13,7 @@ public class SpawnCMD extends CustomCommand {
     private Drusk instance;
 
     public SpawnCMD(@NotNull Drusk instance) {
-        super("spawn","Go to spawn","");
+        super("spawn","Set or visit the initial area on the server.","");
         this.instance = instance;
         registerSubCommand(new SpawnSetSCmd(instance));
     }

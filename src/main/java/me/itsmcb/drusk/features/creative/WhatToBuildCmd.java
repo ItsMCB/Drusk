@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class WhatToBuildCmd extends CustomCommand {
     public WhatToBuildCmd() {
-        super("whattobuild", "Get a suggestion on what you can build.", "drusk.whattobuild");
+        super("whattobuild", "Generate a random build idea.", "drusk.whattobuild");
     }
 
     @Override

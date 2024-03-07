@@ -7,6 +7,7 @@ import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.util.EulerAngle;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class ArmorStandEditorList implements Listener {
 
@@ -35,15 +40,18 @@ public class ArmorStandEditorList implements Listener {
     }
 
     @EventHandler
-    public void onBlockPlace(EntityDamageByEntityEvent event) {
+    public void hitArmorStand(EntityDamageByEntityEvent event) {
         if (!(event.getDamager().getType().equals(EntityType.PLAYER) && event.getEntity().getType().equals(EntityType.ARMOR_STAND))) {
             return;
         }
         Player player = ((Player) event.getDamager()).getPlayer();
-        if (player != null && !(player.isSneaking()) && !player.hasPermission("drusk.editor.armorstand")) {
+        ArmorStand armorStand = (ArmorStand) event.getEntity();
+        if (player == null) {
             return;
         }
-        ArmorStand armorStand = (ArmorStand) event.getEntity();
+        if (!(player.isSneaking()) || !player.hasPermission("drusk.editor.armorstand")) {
+            return;
+        }
         ArmorStandEditStartEvent editStartEvent = new ArmorStandEditStartEvent(armorStand, player);
         Bukkit.getPluginManager().callEvent(editStartEvent);
         if (editStartEvent.isCancelled()) {

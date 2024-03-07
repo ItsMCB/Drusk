@@ -40,19 +40,19 @@ public class ItemInfoScmd extends CustomCommand {
         if (itemMeta.hasCustomModelData()) {
             new BukkitMsgBuilder("&7Custom Model Data: &d"+itemMeta.getCustomModelData()).send(player);
         }
-        if (itemMeta.getPersistentDataContainer().getKeys().size() > 0) {
+        if (!itemMeta.getPersistentDataContainer().getKeys().isEmpty()) {
             new BukkitMsgBuilder("&7Persistent Data Container Data: ").send(player);
             itemMeta.getPersistentDataContainer().getKeys().forEach(key -> {
                 new BukkitMsgBuilder("&8- &7Key: &d"+key.getKey()+" &8 | &7Value: &d"+key.value()).send(player);
             });
         }
-        if (itemMeta.getItemFlags().size() > 0) {
+        if (!itemMeta.getItemFlags().isEmpty()) {
             new BukkitMsgBuilder("&7Item Flags:").send(player);
             itemMeta.getItemFlags().forEach(flag -> {
                 new BukkitMsgBuilder("&8- &d"+flag.name()).send(player);
             });
         }
-        if ((itemMeta.getAttributeModifiers() != null) && (itemMeta.getAttributeModifiers().size() > 0)) {
+        if ((itemMeta.getAttributeModifiers() != null) && (!itemMeta.getAttributeModifiers().isEmpty())) {
             new BukkitMsgBuilder("&7Attribute Modifier:").send(player);
             itemMeta.getAttributeModifiers().asMap().forEach((a,c) -> {
                 new BukkitMsgBuilder("&7Namespace: &d"+a.getKey().getNamespace()).send(player);
@@ -62,6 +62,12 @@ public class ItemInfoScmd extends CustomCommand {
                     new BukkitMsgBuilder("&7Amount: &d"+d.getAmount()).send(player);
                     new BukkitMsgBuilder("&7Operation: &d"+d.getOperation().name()).send(player);
                 });
+            });
+        }
+        if (!itemMeta.getDestroyableKeys().isEmpty()) {
+            new BukkitMsgBuilder("&7Destroyable Keys:").send(player);
+            itemMeta.getDestroyableKeys().forEach(k -> {
+                new BukkitMsgBuilder("&7"+k.getNamespace()+": &d"+k.getKey()).send(player);
             });
         }
 

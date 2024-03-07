@@ -1,7 +1,7 @@
 package me.itsmcb.drusk;
 
 import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
-import me.itsmcb.drusk.features.book.BookFeat;
+import me.itsmcb.drusk.features.text.TextFeat;
 import me.itsmcb.drusk.features.creative.CreativeFeat;
 import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
 import me.itsmcb.drusk.features.flyspeed.FlySpeedFeat;
@@ -10,8 +10,8 @@ import me.itsmcb.drusk.features.gamemode.GamemodeFeat;
 import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
 import me.itsmcb.drusk.features.inventory.InventoryFeat;
 import me.itsmcb.drusk.features.item.ItemFeat;
+import me.itsmcb.drusk.features.logger.LoggerFeat;
 import me.itsmcb.drusk.features.notify.NotifyFeat;
-import me.itsmcb.drusk.features.talk.MsgFeat;
 import me.itsmcb.drusk.features.skin.DruskCostume;
 import me.itsmcb.drusk.features.skin.SkinFeature;
 import me.itsmcb.drusk.features.spawn.SpawnFeature;
@@ -19,6 +19,7 @@ import me.itsmcb.drusk.features.specialevents.SpecialEventsFeature;
 import me.itsmcb.drusk.features.specialitems.SpecialItemsFeat;
 import me.itsmcb.drusk.features.status.StatusFeature;
 import me.itsmcb.drusk.features.tab.TabFeat;
+import me.itsmcb.drusk.features.talk.MsgFeat;
 import me.itsmcb.drusk.features.teleport.TeleportFeat;
 import me.itsmcb.drusk.features.teleport.TeleportRequestManager;
 import me.itsmcb.drusk.features.tools.ToolsFeature;
@@ -92,6 +93,7 @@ public final class Drusk extends JavaPlugin {
         return lastTeleportLocation;
     }
 
+
     public void resetManagers() {
         mainConfig.reload();
         costumes.reload();
@@ -141,13 +143,13 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new TabFeat(instance));
         bukkitFeatureManager.register(new MsgFeat(instance));
         bukkitFeatureManager.register(new FunFeat(instance));
-        bukkitFeatureManager.register(new BookFeat(instance));
+        bukkitFeatureManager.register(new TextFeat(instance));
         bukkitFeatureManager.register(new SpecialItemsFeat(instance));
         bukkitFeatureManager.register(new GamemodeFeat(instance));
         bukkitFeatureManager.register(new CreativeFeat(instance));
         bukkitFeatureManager.register(new ItemFeat(instance));
         bukkitFeatureManager.register(new NotifyFeat(instance));
-        //bukkitFeatureManager.register(new DoubleJumpFeature(instance));
+        bukkitFeatureManager.register(new LoggerFeat(instance));
         //bukkitFeatureManager.register(new PlaceFlag(instance));
         //bukkitFeatureManager.register(new KaboomFeat(instance));
         resetManagers();

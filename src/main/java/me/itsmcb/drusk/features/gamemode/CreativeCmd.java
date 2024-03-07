@@ -17,14 +17,14 @@ public class CreativeCmd extends CustomCommand {
     private final Drusk instance;
 
     public CreativeCmd(Drusk instance, String commandName) {
-        super(commandName, "Creative Mode", "drusk.gamemode.creative");
+        super(commandName, "Switch game mode to creative.", "drusk.gamemode.self.creative");
         this.instance = instance;
     }
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
         CMDHelper cmdHelper = new CMDHelper(args);
-        if (cmdHelper.argExists(0) && player.hasPermission("drusk.gamemode.creative.other")) {
+        if (cmdHelper.argExists(0) && player.hasPermission("drusk.gamemode.other.creative")) {
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
                 new BukkitMsgBuilder("&cPlayer isn't online!").send(player);

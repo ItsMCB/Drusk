@@ -18,7 +18,7 @@ public class SmiteCmd extends CustomCommand {
     private Drusk instance;
 
     public SmiteCmd(Drusk instance) {
-        super("smite", "Summon lighting upon players", "drusk.smite");
+        super("smite", "Summon lighting upon a player.", "drusk.smite");
         this.instance = instance;
     }
 

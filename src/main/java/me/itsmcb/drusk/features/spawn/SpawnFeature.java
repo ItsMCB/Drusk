@@ -6,7 +6,7 @@ import me.itsmcb.vexelcore.bukkit.BukkitFeature;
 public class SpawnFeature extends BukkitFeature {
 
     public SpawnFeature(Drusk instance) {
-        super("spawn", "Handles spawn command and event", null, instance);
+        super("spawn", "Handles spawn command and event", "spawn", instance);
         registerCommand(new SpawnCMD(instance));
     }
 }

@@ -23,8 +23,4 @@ public class NotifySounds implements Listener {
             op.playSound(SFX.PICKUP.getSound());
         });
     }
-
-    private void notifyStaff(Player player) {
-
-    }
 }

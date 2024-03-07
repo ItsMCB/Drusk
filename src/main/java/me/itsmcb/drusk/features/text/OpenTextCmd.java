@@ -1,12 +1,9 @@
-package me.itsmcb.drusk.features.book;
+package me.itsmcb.drusk.features.text;
 
 import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Item;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.PaginatedMenu;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.PluginUtils;
 import me.itsmcb.vexelcore.common.api.config.BoostedConfig;
@@ -17,20 +14,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class OpenBookCmd extends CustomCommand {
+public class OpenTextCmd extends CustomCommand {
 
     private Drusk instance;
 
-    public OpenBookCmd(Drusk instance) {
-        super("openbook", "Handle server books", "drusk.book.open");
+    public OpenTextCmd(Drusk instance) {
+        super("opentext", "Open a server text as a book", "drusk.book.open");
         this.instance = instance;
     }
 
@@ -54,33 +49,12 @@ public class OpenBookCmd extends CustomCommand {
         // Parse placeholders if PAPI is installed
         List<List<BukkitMsgBuilder>> finalSections = sections.stream().map(s -> s.stream().map(ss -> (PluginUtils.pluginIsLoaded("PlaceholderAPI") ? ss.messageText(PlaceholderAPI.setPlaceholders(player,ss.getMessageText())) : ss)).toList()).toList();
 
-        // Check if Bedrock player or not and send data differently accordingly
-        if (PluginUtils.pluginIsLoaded("floodgate")) {
-            FloodgateApi api = FloodgateApi.getInstance();
-            if (api.isFloodgatePlayer(player.getUniqueId())) {
-                // Send as menu because Geyser players don't support virtual books
-                MenuV2 menu = new PaginatedMenu("Click Paper to View Text in Chat",36,player);
-                finalSections.forEach(section -> {
-                    ArrayList<TextComponent> components = new ArrayList<>();
-                    section.forEach(subsection -> {
-                        components.add(subsection.get());
-                    });
-                    menu.addItem(new MenuV2Item(Material.PAPER).name("&7Click to view this message in chat").addLore(components).leftClickAction(e -> {
-                        components.forEach(player::sendMessage);
-                        player.closeInventory();
-                    }));
-                });
-                instance.getMenuManager().open(menu,player);
-                return;
-            }
-        }
-
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta) book.getItemMeta();
 
         // Must set title and author to avoid "invalid book tag" error
-        bookMeta.title(new BukkitMsgBuilder("Title").get());
-        bookMeta.author(new BukkitMsgBuilder("Author").get());
+        bookMeta.title(new BukkitMsgBuilder("Book").get());
+        bookMeta.author(new BukkitMsgBuilder("Server").get());
 
         finalSections.forEach(section -> {
             AtomicReference<TextComponent> textComponent = new AtomicReference<>(Component.text(""));

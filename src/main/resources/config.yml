@@ -12,10 +12,10 @@
 
 # The following lines with hashtags are comments designed to help you understand the options in this configuration file
 
-file-version: 2
+file-version: 3
 
 tab:
-  enabled: true
+  enabled: false
   name: "%luckperms_prefix%&f%player_name%"
   top:
     - '                                        '
@@ -27,13 +27,18 @@ tab:
     - "&7Server: &d%server_name% &8| &7Ping: &d%player_ping%ms"
     - "&7Online: &d%server_online% &8| &7Global: &d%bungee_total%"
     - ''
+
 spawn:
+  enabled: false
   first-join-location: null
   location: null
 
+messaging:
+  enabled: false
+
 events:
   join:
-    enabled: true
+    enabled: false
     # Leave empty to disable default message
     message: "&e%player_name% jumped into the server"
     first-join-message: "&e%player_name% joined for the first time!"
@@ -47,10 +52,15 @@ events:
       on-first-join: true
       on-join: true
   leave:
-    enabled: true
+    enabled: false
     # Leave empty to disable default message
     message: "&e%player_name% had to leave"
   death:
-    enabled: true
+    enabled: false
     # Leave empty to disable default message
     message: "&e%player_name% got rekt"
+
+logging:
+  enabled: false
+  token: ""
+  channel-id: ""

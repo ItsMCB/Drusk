@@ -17,14 +17,14 @@ public class SpectatorCmd extends CustomCommand {
     private final Drusk instance;
 
     public SpectatorCmd(Drusk instance, String commandName) {
-        super(commandName, "Spectator Mode", "drusk.gamemode.spectator");
+        super(commandName, "Switch game mode to spectator.", "drusk.gamemode.self.spectator");
         this.instance = instance;
     }
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
         CMDHelper cmdHelper = new CMDHelper(args);
-        if (cmdHelper.argExists(0) && player.hasPermission("drusk.gamemode.spectator.other")) {
+        if (cmdHelper.argExists(0) && player.hasPermission("drusk.gamemode.other.spectator")) {
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
                 new BukkitMsgBuilder("&cPlayer isn't online!").send(player);

@@ -39,7 +39,7 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
     // Citizens
     compileOnly('net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT') {
         exclude group: '*', module: '*'
@@ -66,6 +66,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0'
     // Geyser Floodgate
     compileOnly('org.geysermc.floodgate:api:2.2.2-SNAPSHOT')
+    // Discord Bot JDA
+    implementation("net.dv8tion:JDA:5.0.0-beta.19")
 }
 
 def targetJavaVersion = 17

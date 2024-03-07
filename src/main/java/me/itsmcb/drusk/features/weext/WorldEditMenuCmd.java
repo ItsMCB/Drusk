@@ -76,7 +76,7 @@ public class WorldEditMenuCmd extends CustomCommand {
                 .addItem(new MenuV2Item(Material.SNOW_BLOCK).name("&dSet Biome").clickAction(e -> {
                     openBiomeMenu(player);
                 }))
-                .addItem(new MenuV2Item(Material.GRASS).name("&dApply Grass and Ferns")
+                .addItem(new MenuV2Item(Material.TALL_GRASS).name("&dApply Grass and Ferns")
                         .addLore("&7For this to work, ensure your selection includes air above it.")
                         .clickAction(e -> {
                     WERun.runWECmd("/re \"air >2\" #simplex[4][tall_grass,fern,air,air,air]",player);

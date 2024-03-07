@@ -17,14 +17,14 @@ public class AdventureCmd extends CustomCommand {
     private final Drusk instance;
 
     public AdventureCmd(Drusk instance, String commandName) {
-        super(commandName, "Adventure Mode", "drusk.gamemode.adventure");
+        super(commandName, "Switch game mode to adventure.", "drusk.gamemode.self.adventure");
         this.instance = instance;
     }
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
         CMDHelper cmdHelper = new CMDHelper(args);
-        if (cmdHelper.argExists(0) && player.hasPermission("drusk.gamemode.adventure.other")) {
+        if (cmdHelper.argExists(0) && player.hasPermission("drusk.gamemode.other.adventure")) {
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
                 new BukkitMsgBuilder("&cPlayer isn't online!").send(player);

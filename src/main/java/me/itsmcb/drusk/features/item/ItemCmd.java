@@ -7,7 +7,7 @@ import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 public class ItemCmd extends CustomCommand {
     private final Drusk instance;
     public ItemCmd(Drusk instance) {
-        super("item", "Display or edit item in hand.", "drusk.item.edit");
+        super("item", "Display or edit the item in your hand.", "drusk.item.edit");
         this.instance = instance;
         registerSubCommand(new ItemInfoScmd(instance));
         registerSubCommand(new ItemModelData(instance));

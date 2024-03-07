@@ -5,7 +5,7 @@ import me.itsmcb.vexelcore.bukkit.BukkitFeature;
 
 public class MsgFeat extends BukkitFeature {
     public MsgFeat(Drusk instance) {
-        super("Talk", "Talk with others", null, instance);
+        super("Talk", "Talk with others", "messaging", instance);
         registerCommand(new MsgCmd(instance));
         registerCommand(new SayCmd(instance));
     }

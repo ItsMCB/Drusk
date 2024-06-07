@@ -47,36 +47,6 @@ public class FlySpeedCmd extends CustomCommand {
         }
         target.setFlySpeed(speed == 0.0f ? 0.0f : speed / 10.0f);
         new BukkitMsgBuilder("&7Set fly speed of &a" + target.getName() + "&7 to &a" + speed).send(player);
-        /*
-        if (cmdHelper.isInt(0)) {
-            float newSpeed = 0;
-            switch (Integer.parseInt(args[0])) {
-                case 0 -> newSpeed = 0.0F;
-                case 1 -> newSpeed = 0.1F;
-                case 2 -> newSpeed = 0.2F;
-                case 3 -> newSpeed = 0.3F;
-                case 4 -> newSpeed = 0.4F;
-                case 5 -> newSpeed = 0.5F;
-                case 6 -> newSpeed = 0.6F;
-                case 7 -> newSpeed = 0.7F;
-                case 8 -> newSpeed = 0.8F;
-                case 9 -> newSpeed = 0.9F;
-                default -> newSpeed = 1F;
-            }
-            Player target = player;
-            if (cmdHelper.argExists(1)) {
-                if (BukkitUtils.isOnlinePlayer(args[1])) {
-                    target = Bukkit.getPlayer(args[1]);
-                } else {
-                    new BukkitMsgBuilder("&cPlayer isn't online!").send(player);
-                }
-            }
-            target.setFlySpeed(newSpeed);
-            new BukkitMsgBuilder("&7Set fly speed of &a" + target.getName() + "&7 to &a" + args[0]);
-            return;
-        }
-
-         */
     }
 
     @Override

@@ -15,12 +15,15 @@ import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Snowable;
 import org.bukkit.block.data.type.Light;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -108,7 +111,7 @@ public class SpecialItemsListener implements Listener {
             return;
         }
         int heldSlot = event.getPlayer().getInventory().getHeldItemSlot();
-        // Light Block
+        // Light Block - Editor
         if (action.equals(Action.RIGHT_CLICK_AIR) && itemStack.getType().equals(Material.LIGHT)) {
             MenuV2 menu = new MenuV2("&3Set Light Amount", InventoryType.CHEST,18).clickCloseMenu(true);
             for (int i = 1; i < 16; i++) {
@@ -131,6 +134,23 @@ public class SpecialItemsListener implements Listener {
                 menu.addItem(item);
             }
             instance.getMenuManager().open(menu, event.getPlayer());
+        }
+
+        String data = itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        if (data == null) {
+            return;
+        }
+
+        // Arctic Fox - Spawn
+        if (action.equals(Action.RIGHT_CLICK_BLOCK) && itemStack.getType().equals(Material.FOX_SPAWN_EGG)) {
+            if (data.equals("fox_snow")) {
+                event.setCancelled(true); // Prevent a regular fox from being spawned
+                Location location = event.getInteractionPoint();
+                location.getWorld().spawn(location, Fox.class, CreatureSpawnEvent.SpawnReason.CUSTOM, fox -> {
+                    fox.setFoxType(Fox.Type.SNOW);
+                    fox.customName(null);  // Remove custom name (otherwise it will be the same as the spawn egg)
+                });
+            }
         }
     }
 

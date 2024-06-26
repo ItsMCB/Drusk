@@ -13,11 +13,14 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.Snowable;
 import org.bukkit.block.data.type.Light;
+import org.bukkit.entity.EntitySnapshot;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SpawnEggMeta;
 
 public class SpecialItemsCmd extends CustomCommand {
 
@@ -121,6 +124,13 @@ public class SpecialItemsCmd extends CustomCommand {
         snowyGrass.setItemMeta(snowyBlockMeta);
         menu.addItem(snowyGrass.leftClickAction(event -> {
             player.getInventory().addItem(snowyGrass.getCleanItemStack());
+        }));
+
+        // Arctic Fox
+        MenuV2Item arcticFoxSpawnEgg = new MenuV2Item(Material.FOX_SPAWN_EGG).name("&d&lArctic Fox Spawn Egg")
+                .addData(new MenuV2ItemData(specialItemKey,"fox_snow"));
+        menu.addItem(arcticFoxSpawnEgg.leftClickAction(event -> {
+            player.getInventory().addItem(arcticFoxSpawnEgg.getCleanItemStack());
         }));
 
         instance.getMenuManager().open(menu, player);

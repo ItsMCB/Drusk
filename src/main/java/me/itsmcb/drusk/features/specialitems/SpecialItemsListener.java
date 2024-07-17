@@ -135,7 +135,7 @@ public class SpecialItemsListener implements Listener {
             }
             instance.getMenuManager().open(menu, event.getPlayer());
         }
-
+        /*
         String data = itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
         if (data == null) {
             return;
@@ -152,6 +152,7 @@ public class SpecialItemsListener implements Listener {
                 });
             }
         }
+         */
     }
 
     @EventHandler

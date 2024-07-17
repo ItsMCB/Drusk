@@ -25,6 +25,7 @@ import me.itsmcb.drusk.features.teleport.TeleportRequestManager;
 import me.itsmcb.drusk.features.tools.ToolsFeature;
 import me.itsmcb.drusk.features.weext.WorldEditExtensionsFeat;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
+import me.itsmcb.vexelcore.bukkit.api.managers.CacheManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.LocalizationManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.PermissionManager;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Manager;
@@ -57,6 +58,12 @@ public final class Drusk extends JavaPlugin {
 
     public MenuV2Manager getMenuManager() {
         return menuManager;
+    }
+
+    private CacheManager cacheManager;
+
+    public CacheManager getCacheManager() {
+        return cacheManager;
     }
 
     public BukkitFeatureManager getBukkitFeatureManager() {
@@ -112,15 +119,17 @@ public final class Drusk extends JavaPlugin {
     public void onEnable() {
         this.instance = this;
         // Config
-        mainConfig = new BoostedConfig(getDataFolder(),"config", getResource("config.yml"), new SpigotSerializer());
+        mainConfig = new BoostedConfig(getDataFolder(),"config", getResource("config.yml"), SpigotSerializer.getInstance());
         ConfigurationSerialization.registerClass(BukkitMsgBuilder.class, "BukkitMsgBuilder");
         //texts.add(new BoostedConfig(textsFile, "welcome", getResource("welcome.yml"), new SpigotSerializer()));
         ConfigurationSerialization.registerClass(DruskCostume.class, "Costume");
-        costumes = new BoostedConfig(getDataFolder(), "costumes", getResource("costumes.yml"), new SpigotSerializer());
+        costumes = new BoostedConfig(getDataFolder(), "costumes", getResource("costumes.yml"), SpigotSerializer.getInstance());
 
         // Set permissions
         this.permissionManager = new PermissionManager();
         permissionManager.set("admin","drusk.admin");
+
+        cacheManager = new CacheManager(this);
 
         // Load configurations and options
         // todo hook into future localization plugin to get default server language

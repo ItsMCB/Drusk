@@ -126,12 +126,14 @@ public class SpecialItemsCmd extends CustomCommand {
             player.getInventory().addItem(snowyGrass.getCleanItemStack());
         }));
 
+        /*
         // Arctic Fox
         MenuV2Item arcticFoxSpawnEgg = new MenuV2Item(Material.FOX_SPAWN_EGG).name("&d&lArctic Fox Spawn Egg")
                 .addData(new MenuV2ItemData(specialItemKey,"fox_snow"));
         menu.addItem(arcticFoxSpawnEgg.leftClickAction(event -> {
             player.getInventory().addItem(arcticFoxSpawnEgg.getCleanItemStack());
         }));
+         */
 
         instance.getMenuManager().open(menu, player);
     }

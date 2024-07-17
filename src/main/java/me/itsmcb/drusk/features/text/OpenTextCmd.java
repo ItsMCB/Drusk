@@ -40,7 +40,7 @@ public class OpenTextCmd extends CustomCommand {
             new BukkitMsgBuilder("&cText could not be found!").send(player);
             return;
         }
-        BoostedConfig config = new BoostedConfig(new File(instance.getDataFolder() + File.separator + "texts"), file.get(), null, new SpigotSerializer());
+        BoostedConfig config = new BoostedConfig(new File(instance.getDataFolder() + File.separator + "texts"), file.get(), null, SpigotSerializer.getInstance());
 
         // Check if sections exist
         // TODO for some reason placeholders are changed

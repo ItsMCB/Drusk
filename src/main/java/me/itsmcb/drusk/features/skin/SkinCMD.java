@@ -21,6 +21,7 @@ public class SkinCMD extends CustomCommand {
         this.instance = instance;
         registerSubCommand(new CopySCmd(instance));
         registerSubCommand(new SelectSCmd(instance));
+        registerSubCommand(new CachedSCmd(instance));
         registerSubCommand(new SaveSCmd(instance));
         addParameter("reset", "Resets skin to default.");
     }

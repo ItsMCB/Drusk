@@ -16,7 +16,7 @@ public class DruskAPI {
 
     public static String randomBuildThing() {
         List<String> buildings = List.of("Home","Villa","Bridge","Castle","Palace","Police Station","Prison","Storehouse","Factory","Fortress","University","Statue","Haunted Manor","Battleship Carrier","Theatre","Gazebo","Football Stadium","Temple","Laboratory");
-        List<String> areaStructures = List.of("Village","Town Square","Marketplace","City");
+        List<String> areaStructures = List.of("Village","Town Square","Marketplace","City","Farm","River","Pond");
         List<String> things = List.of("Defense Line","Robot","Interior","Creature");
         List<String> vehicles = List.of("Spaceship","Car","Tank","Train");
         List<List<String>> thingList = List.of(buildings,things,vehicles,areaStructures);

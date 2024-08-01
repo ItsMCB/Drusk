@@ -51,7 +51,7 @@ dependencies {
     // Placeholder API
     compileOnly 'me.clip:placeholderapi:2.11.3'
     // CoreProtect
-    compileOnly "net.coreprotect:coreprotect:21.3"
+    compileOnly "net.coreprotect:coreprotect:22.4"
     // FAWE
     implementation(platform("com.intellectualsites.bom:bom-1.18.x:1.20"))
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core")

@@ -12,6 +12,10 @@ public class WhatToBuildCmd extends CustomCommand {
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
-        new BukkitMsgBuilder("&7Your randomly generated build is a &d"+ DruskAPI.randomBuildStyle() +"&7 style &d"+DruskAPI.randomBuildThing()).send(player);
+        new BukkitMsgBuilder("&7Here are three randomly generated build ideas:" +
+                "\n- &d"+ DruskAPI.randomBuildStyle() +"&7 style &d"+DruskAPI.randomBuildThing() +
+                "&7\n- &d"+ DruskAPI.randomBuildStyle() +"&7 style &d"+DruskAPI.randomBuildThing() +
+                "&7\n- &d"+ DruskAPI.randomBuildStyle() +"&7 style &d"+DruskAPI.randomBuildThing()
+        ).send(player);
     }
 }

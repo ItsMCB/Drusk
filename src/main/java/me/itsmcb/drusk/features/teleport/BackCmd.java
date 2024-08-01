@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.List;
 
 public class BackCmd extends CustomCommand {
@@ -33,6 +34,11 @@ public class BackCmd extends CustomCommand {
         }
         Location loc = instance.getLastTeleportLocation().get(player.getUniqueId());
         if (!Bukkit.getWorlds().contains(loc.getWorld())) {
+            File possibleWorld = new File(Bukkit.getWorldContainer()+File.separator+loc.getWorld().getName());
+            if (!possibleWorld.exists()) {
+                new BukkitMsgBuilder("&cUh oh! The world you were about to teleport to can't be found. Was it deleted?").send(player);
+                return;
+            }
             VoyageWorld vw = new VoyageWorld(loc.getWorld());
             vw.load();
             loc.setWorld(vw.getWorld());

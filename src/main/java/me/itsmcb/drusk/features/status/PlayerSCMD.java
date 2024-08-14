@@ -9,13 +9,13 @@ import me.itsmcb.vexelcore.bukkit.plugin.CachedPlayer;
 import me.itsmcb.vexelcore.common.api.command.CMDHelper;
 import me.itsmcb.vexelcore.common.api.utils.TimeUtils;
 import net.coreprotect.CoreProtectAPI;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,65 +33,103 @@ public class PlayerSCMD extends CustomCommand {
     @Override
     public void executeAsPlayer(Player player, String[] args) {
         CMDHelper cmdHelper = new CMDHelper(args);
-        // Custom command to do: require arg
-        if (cmdHelper.argExists(0)) {
-            OfflinePlayer selectedPlayer = Bukkit.getOfflinePlayer(args[0]);
-            if (!(selectedPlayer.hasPlayedBefore() || selectedPlayer.isOnline())) {
-                new BukkitMsgBuilder("&cPlayer hasn't played before!").send(player);
-                return;
-            }
-
-            TextComponent bar = new BukkitMsgBuilder("&7===== ").get();
-
-            // Initial information
-            TextComponent username = new BukkitMsgBuilder("&d"+selectedPlayer.getName()).hover("&7Click to copy").clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, selectedPlayer.getName()).get();
-            TextComponent uuid = new BukkitMsgBuilder("&7 (&5"+selectedPlayer.getUniqueId()+"&7) ").hover("&7Click to copy").clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,selectedPlayer.getUniqueId()+"").get();
-            player.sendMessage(bar.append(username).append(uuid.append(bar)));
-            // History
-            new BukkitMsgBuilder(
-                    "\n&7Playtime: &3"+ TimeUtils.formatSecondsToTime(selectedPlayer.getStatistic(Statistic.TOTAL_WORLD_TIME)/20)
-            ).send(player);
-            // Online information
-            if (selectedPlayer instanceof Player onlinePlayer) {
-                new BukkitMsgBuilder("&3Client Information").hover(
-                        "&7Brand Name: &3"+onlinePlayer.getClientBrandName()+"\n"+
-                                "&7Ping: &3"+onlinePlayer.getPing()+"\n"+
-                                "&7View Distance: &3"+onlinePlayer.getClientViewDistance()+"\n"+
-                                "&7Locale: &3"+onlinePlayer.getClientOption(ClientOption.LOCALE)+"\n"+
-                                "&7Chat Visibility: &3"+onlinePlayer.getClientOption(ClientOption.CHAT_VISIBILITY).name()+"\n"+
-                                "&7Chat Colors Enabled: &3"+onlinePlayer.getClientOption(ClientOption.CHAT_COLORS_ENABLED)+"\n"+
-                                "&7Allow Server Listings: &3"+onlinePlayer.getClientOption(ClientOption.ALLOW_SERVER_LISTINGS)+"\n"+
-                                "&7Main Hand: &3"+onlinePlayer.getClientOption(ClientOption.MAIN_HAND)+"\n"+
-                                "&7Text Filtering Enabled: &3"+onlinePlayer.getClientOption(ClientOption.TEXT_FILTERING_ENABLED)+"\n"+
-                                "&7Has Cape: &3"+onlinePlayer.getClientOption(ClientOption.SKIN_PARTS).hasCapeEnabled()
-                ).send(player);
-            }
-            new BukkitMsgBuilder("&8- &aFirst Played: " + TimeUtils.concise2EpochDateFromMilliseconds(selectedPlayer.getFirstPlayed())).send(player);
-            new BukkitMsgBuilder("&8- &cLast Seen: " + TimeUtils.concise2EpochDateFromMilliseconds(selectedPlayer.getLastSeen())+"\n").send(player);
-
+        if (!cmdHelper.argExists(0)) {
+            new BukkitMsgBuilder("&cProvide a username!").send(player);
+            return;
+        }
+        // Offline data
+        OfflinePlayer selectedPlayer = Bukkit.getOfflinePlayer(args[0]);
+        new BukkitMsgBuilder("&8&m     &7&m     &8&m     &7&m     &r&8[ &3Player Status"+ (selectedPlayer.isOp() ? "&7(&dOperator&7)" : "")+" &8]&7&m     &8&m     &7&m     &8&m     ").send(player);
+        new BukkitMsgBuilder("&8╔ &l&3Offline Player Data").send(player);
+        new BukkitMsgBuilder("&8╠═ &7Username: &3"+selectedPlayer.getName())
+                .hover("&7Click to copy")
+                .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,selectedPlayer.getName())
+                .send(player);
+        new BukkitMsgBuilder("&8╠═ &7UUID: &3"+selectedPlayer.getUniqueId())
+                .hover("&7Click to copy")
+                .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,selectedPlayer.getUniqueId()+"")
+                .send(player);
+        new BukkitMsgBuilder("&8╠═ &7Server Playtime: &3"+TimeUtils.formatSecondsToTime(selectedPlayer.getStatistic(Statistic.TOTAL_WORLD_TIME)/20))
+                .hover("&7Click to copy")
+                .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,TimeUtils.formatSecondsToTime(selectedPlayer.getStatistic(Statistic.TOTAL_WORLD_TIME)/20))
+                .send(player);
+        if (cmdHelper.argEquals(1,"--full")) {
+            // VexelCore cached player data
+            new BukkitMsgBuilder("&8║").send(player);
+            new BukkitMsgBuilder("&8╠ &l&3Cached Player Data (VexelCore)").send(player);
             CachedPlayer cachedPlayer = new CachedPlayer(selectedPlayer.getUniqueId());
-            String value = cachedPlayer.getPlayerSkin().getValue();
-            new BukkitMsgBuilder("&3Skin Value").hover("&7"+value).clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,value).send(player);
-            String signature = cachedPlayer.getPlayerSkin().getSignature();
-            new BukkitMsgBuilder("&3Skin Signature").hover("&7"+signature).clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,signature).send(player);
-
-            // CoreProtect extension
+            new BukkitMsgBuilder("&8╠═ &7Username: &3"+cachedPlayer.getName())
+                    .hover("&7Click to copy")
+                    .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,cachedPlayer.getName())
+                    .send(player);
+            new BukkitMsgBuilder("&8╠═ &7UUID: &3"+cachedPlayer.getUUID())
+                    .hover("&7Click to copy")
+                    .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,cachedPlayer.getUUID()+"")
+                    .send(player);
+            String skinValue = cachedPlayer.getPlayerSkin().getValue();
+            String skinSignature = cachedPlayer.getPlayerSkin().getSignature();
+            new BukkitMsgBuilder("&8╠═ &7Skin Value: &3Hidden (hover to view)")
+                    .hover("&7Click to copy: &3"+skinValue)
+                    .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,skinValue)
+                    .send(player);
+            new BukkitMsgBuilder("&8╠═ &7Skin Signature: &3Hidden (hover to view)")
+                    .hover("&7Click to copy: &3"+skinSignature)
+                    .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,skinSignature)
+                    .send(player);
+        }
+        // Online data
+        Player selectedOnlinePlayer = selectedPlayer.getPlayer();
+        if (selectedOnlinePlayer == null) {
+            return;
+        }
+        new BukkitMsgBuilder("&8║").send(player);
+        new BukkitMsgBuilder("&8╠ &l&3Online Player Data").send(player);
+        new BukkitMsgBuilder("&8╠═ &7World: &3"+selectedOnlinePlayer.getWorld().getName())
+                .hover("&7Click to teleport")
+                .clickEvent(ClickEvent.Action.RUN_COMMAND,"/world teleport "+selectedOnlinePlayer.getWorld().getName())
+                .send(player);
+        new BukkitMsgBuilder("&8╠═ &7Ping: &3"+selectedOnlinePlayer.getPing())
+                .hover("&7Click to copy ping")
+                .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,selectedOnlinePlayer.getPing()+"")
+                .send(player);
+        new BukkitMsgBuilder("&8╠═ &7IP Address: &3Hidden (hover to view)")
+                .hover("&7Click to copy: &3"+selectedOnlinePlayer.getAddress().getAddress())
+                .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,selectedOnlinePlayer.getAddress().getAddress()+"")
+                .send(player);
+        if (cmdHelper.argEquals(1,"--full")) {
+            new BukkitMsgBuilder("&8╠═ &7Client Brand: &3"+selectedOnlinePlayer.getClientBrandName())
+                    .hover("&7Click to copy")
+                    .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,selectedOnlinePlayer.getClientBrandName())
+                    .send(player);
+            new BukkitMsgBuilder("&8╠═ &7Client View Distance: &3"+selectedOnlinePlayer.getViewDistance())
+                    .hover("&7Click to copy")
+                    .clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,selectedOnlinePlayer.getViewDistance()+"")
+                    .send(player);
+            new BukkitMsgBuilder("&8╠═ &7Client Locale: &3"+selectedOnlinePlayer.locale().getDisplayName() +" | "+selectedOnlinePlayer.locale().getCountry()).send(player);
+            new BukkitMsgBuilder("&8╠═ &7Client Chat Visibility: &3"+selectedOnlinePlayer.getClientOption(ClientOption.CHAT_VISIBILITY).name()).send(player);
+            // CoreProtect data
+            new BukkitMsgBuilder("&8║").send(player);
+            new BukkitMsgBuilder("&8╠ &l&3CoreProtect Data").send(player);
             CoreProtectAPI coreProtectAPI = PluginUtils.getCoreProtect();
-            if (coreProtectAPI == null){ // Ensure we have access to the API
+            if (coreProtectAPI == null) { // Ensure we have access to the API
+                new BukkitMsgBuilder("&cCoreProtect is not installed").send(player);
                 return;
             }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    List<String[]> blocksBrokenLookup = coreProtectAPI.performLookup(2630000, Collections.singletonList(selectedPlayer.getName()),null,null,null, Arrays.asList(0), 0, null);
+                    List<String[]> blocksPlacedLookup = coreProtectAPI.performLookup(2630000, Collections.singletonList(selectedPlayer.getName()),null,null,null, Arrays.asList(1), 0, null);
+                    List<String[]> interactionLookup = coreProtectAPI.performLookup(2630000, Collections.singletonList(selectedPlayer.getName()),null,null,null, Arrays.asList(2), 0, null);
 
-            // CoreProtect results
-            List<String[]> blocksBrokenLookup = coreProtectAPI.performLookup(2630000, Collections.singletonList(selectedPlayer.getName()),null,null,null, Arrays.asList(0), 0, null);
-            List<String[]> blocksPlacedLookup = coreProtectAPI.performLookup(2630000, Collections.singletonList(selectedPlayer.getName()),null,null,null, Arrays.asList(1), 0, null);
-            List<String[]> interactionLookup = coreProtectAPI.performLookup(2630000, Collections.singletonList(selectedPlayer.getName()),null,null,null, Arrays.asList(2), 0, null);
-
-            new BukkitMsgBuilder("&8- &eBlocks Broken:").hover("View more logs").clickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/co lookup "+selectedPlayer.getName()+" time:1w ").send(player);
-            sendCoreProtectLookupFormatted(blocksBrokenLookup, player);
-            new BukkitMsgBuilder("&8- &eBlocks Placed:").hover("View more logs").clickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/co lookup "+selectedPlayer.getName()+" time:1w ").send(player);
-            sendCoreProtectLookupFormatted(blocksPlacedLookup, player);
-            new BukkitMsgBuilder("&8- &eInteractions:").hover("View more logs").clickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/co lookup "+selectedPlayer.getName()+" time:1w ").send(player);
-            sendCoreProtectLookupFormatted(interactionLookup, player);
+                    new BukkitMsgBuilder("&8╠═ &7Blocks Broken:").hover("View more logs").clickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/co lookup "+selectedPlayer.getName()+" time:1w ").send(player);
+                    sendCoreProtectLookupFormatted(blocksBrokenLookup, player);
+                    new BukkitMsgBuilder("&8╠═ &7Blocks Placed:").hover("View more logs").clickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/co lookup "+selectedPlayer.getName()+" time:1w ").send(player);
+                    sendCoreProtectLookupFormatted(blocksPlacedLookup, player);
+                    new BukkitMsgBuilder("&8╠═ &7Interactions:").hover("View more logs").clickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/co lookup "+selectedPlayer.getName()+" time:1w ").send(player);
+                    sendCoreProtectLookupFormatted(interactionLookup, player);
+                }
+            }.runTaskAsynchronously(instance);
         }
         // instance.getServer().getServicesManager().load(LuckPerms.class).getUserManager().getUser(selectedPlayer.getUniqueId()).getPrimaryGroup() + " &7- &e&l" +
     }
@@ -110,7 +148,7 @@ public class PlayerSCMD extends CustomCommand {
             int x = parseResult.getX();
             int y = parseResult.getY();
             int z = parseResult.getZ();
-            new BukkitMsgBuilder("  &7- &3"+parseResult.getType().name()+" &7- &e@ "+x+" "+y+" "+z)
+            new BukkitMsgBuilder("&8╠══ &9"+parseResult.getType().name()+" &7- &e@ "+x+" "+y+" "+z)
                     .hover("&7Click to teleport")
                     .clickEvent(ClickEvent.Action.RUN_COMMAND,"/teleport "+x+" "+y+" "+z)
                     .send(player);

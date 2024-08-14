@@ -20,30 +20,27 @@ public class JVMSCMD extends CustomCommand {
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
-        new BukkitMsgBuilder("&7========== &3&lJVM &r&7==========").send(player);
+        new BukkitMsgBuilder("&8&m     &7&m     &8&m     &7&m     &r&8[ &3JVM Status &8]&7&m     &8&m     &7&m     &8&m     ").send(player);
         // Memory
         double memoryUsed = ((Runtime.getRuntime().totalMemory()/1048576f)-(Runtime.getRuntime().freeMemory()/1048576f));
         double memoryTotal = (Runtime.getRuntime().totalMemory()/1048576f);
         double memoryUsedPercent = ((memoryUsed/memoryTotal)*100);
         DecimalFormat percentDecimalFormat = new DecimalFormat("#.##");
-        new BukkitMsgBuilder("&3Memory Usage: &b"+ percentDecimalFormat.format(memoryUsedPercent) + "% &7(&b" + percentDecimalFormat.format(memoryUsed) + " mb&7/&b"+percentDecimalFormat.format(memoryTotal)+" mb&7)")
-                .send(player);
-        // Uptime
-        new BukkitMsgBuilder("&3Uptime: &b" + TimeUtils.formatSecondsToTime((int) (ManagementFactory.getRuntimeMXBean().getUptime()/1000))).send(player);
-        // Platform
-        new BukkitMsgBuilder("&3Platform: &b" + System.getProperty("os.arch") + " &7(&b"+System.getProperty("os.name")+"&7)").send(player);
+        new BukkitMsgBuilder("&8╠═ &7Uptime: &3"+TimeUtils.formatSecondsToTime((int) (ManagementFactory.getRuntimeMXBean().getUptime()/1000))).send(player);
+        new BukkitMsgBuilder("&8╠═ &7Memory Usage: &3"+ percentDecimalFormat.format(memoryUsedPercent) + "% &7(&3" + percentDecimalFormat.format(memoryUsed) + " mb&7/&3"+percentDecimalFormat.format(memoryTotal)+" mb&7)").send(player);
+        new BukkitMsgBuilder("&8╠═ &7Platform: &3"+System.getProperty("os.arch") + " &7(&3"+System.getProperty("os.name")+"&7)").send(player);
+
         // JVM
         String JVMName = ManagementFactory.getRuntimeMXBean().getVmName();
         String JVMVendor = ManagementFactory.getRuntimeMXBean().getVmVendor();
         String JVMVersion = ManagementFactory.getRuntimeMXBean().getVmVersion();
         String JavaVersion =  ManagementFactory.getRuntimeMXBean().getSpecVersion();
-        new BukkitMsgBuilder("&3JVM: &b" + JVMName + " &7- &b" + JVMVendor + " &7- &bbuild " + JVMVersion + " &7(&bJava "+JavaVersion+"&7)").send(player);
+        new BukkitMsgBuilder("&8╠═ &7JVM: &3" + JVMName + " &7- &3" + JVMVendor + " &7- &3" + JVMVersion + " &7(&3Java "+JavaVersion+"&7)").send(player);
         // Processors
-        new BukkitMsgBuilder("&3CPU Processors: &b" + Runtime.getRuntime().availableProcessors()).send(player);
+        new BukkitMsgBuilder("&8╠═ &7CPU Processors: &3" + Runtime.getRuntime().availableProcessors()).send(player);
         // Threads
-        new BukkitMsgBuilder("&3Threads: &b" + ManagementFactory.getThreadMXBean().getThreadCount()).send(player);
+        new BukkitMsgBuilder("&8╠═ &7Active Threads: &3" + ManagementFactory.getThreadMXBean().getThreadCount()).send(player);
         // Flags
-        new BukkitMsgBuilder("&3Flags: &b" + String.join(", ", ManagementFactory.getRuntimeMXBean().getInputArguments())).send(player);
-
+        new BukkitMsgBuilder("&8╠═ &7Flags: &3" + String.join(", ", ManagementFactory.getRuntimeMXBean().getInputArguments())).send(player);
     }
 }

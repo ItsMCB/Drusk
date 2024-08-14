@@ -1,6 +1,8 @@
 package me.itsmcb.drusk;
 
 import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
+import me.itsmcb.drusk.features.firework.CustomFirework;
+import me.itsmcb.drusk.features.firework.FireworkFeat;
 import me.itsmcb.drusk.features.text.TextFeat;
 import me.itsmcb.drusk.features.creative.CreativeFeat;
 import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
@@ -54,6 +56,8 @@ public final class Drusk extends JavaPlugin {
 
     private BoostedConfig costumes;
 
+    private BoostedConfig fireworks;
+
     private MenuV2Manager menuManager;
 
     public MenuV2Manager getMenuManager() {
@@ -84,6 +88,10 @@ public final class Drusk extends JavaPlugin {
 
     public BoostedConfig getCostumes() {
         return costumes;
+    }
+
+    public BoostedConfig getFireworks() {
+        return fireworks;
     }
 
     private File textsFile = Path.of(getDataFolder() + File.separator + "texts").toFile();
@@ -124,6 +132,8 @@ public final class Drusk extends JavaPlugin {
         //texts.add(new BoostedConfig(textsFile, "welcome", getResource("welcome.yml"), new SpigotSerializer()));
         ConfigurationSerialization.registerClass(DruskCostume.class, "Costume");
         costumes = new BoostedConfig(getDataFolder(), "costumes", getResource("costumes.yml"), SpigotSerializer.getInstance());
+        ConfigurationSerialization.registerClass(CustomFirework.class, "CustomFirework");
+        fireworks = new BoostedConfig(getDataFolder(), "fireworks", null, SpigotSerializer.getInstance());
 
         // Set permissions
         this.permissionManager = new PermissionManager();
@@ -158,6 +168,7 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new CreativeFeat(instance));
         bukkitFeatureManager.register(new ItemFeat(instance));
         bukkitFeatureManager.register(new NotifyFeat(instance));
+        bukkitFeatureManager.register(new FireworkFeat(instance));
         bukkitFeatureManager.register(new LoggerFeat(instance));
         //bukkitFeatureManager.register(new PlaceFlag(instance));
         //bukkitFeatureManager.register(new KaboomFeat(instance));

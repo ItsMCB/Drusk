@@ -14,8 +14,6 @@ public class StatusCMD extends CustomCommand {
         registerSubCommand(new PlayerDataSCMD(instance));
         registerSubCommand(new ServerSCMD(instance));
         registerSubCommand(new JVMSCMD(instance));
-        registerSubCommand(new PlayersSCmd(instance));
         registerSubCommand(new StorageSCmd(instance));
-        registerSubCommand(new PlaytimeSCmd(instance));
     }
 }

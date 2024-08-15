@@ -10,7 +10,6 @@ import me.itsmcb.vexelcore.bukkit.api.menuv2.SkullBuilder;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.common.api.HeadTexture;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -31,17 +30,17 @@ public class FireworkCmd extends CustomCommand {
     private Drusk instance;
 
     public FireworkCmd(Drusk instance) {
-        super("fw", "Manage and create fireworks", "drusk.firework");
+        super("fw", "Create, modify, save, and share fireworks", "drusk.firework");
         this.instance = instance;
     }
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
-        MenuV2 creator = new MenuV2("&8Fireworks", InventoryType.CHEST,9).clickCloseMenu(true)
-                .addItem(new SkullBuilder(HeadTexture.GREEN_PLUS.getTexture()).name("&dCreate New").clickAction(e -> {
+        MenuV2 creator = new MenuV2("&8Libre Galaxy Fireworks", InventoryType.CHEST,9).clickCloseMenu(true)
+                .addItem(new SkullBuilder(HeadTexture.GREEN_PLUS.getTexture()).name("&3Create New").slot(1).addLore("&7Create a firework from scratch","","&3➤ &7Click to open editor").clickAction(e -> {
                     rocketEditor(new ItemStack(Material.FIREWORK_ROCKET),player);
                 }))
-                .addItem(new SkullBuilder(HeadTexture.TOOL_RACK.getTexture()).name("&dModify Hand").addLore("&7Edit the rocket in your main hand").clickAction(e -> {
+                .addItem(new SkullBuilder(HeadTexture.TOOL_RACK.getTexture()).name("&3Modify Hand").slot(3).addLore("&7Edit the rocket in your main hand","","&3➤ &7Click to open editor").clickAction(e -> {
                     ItemStack mainHand = player.getInventory().getItemInMainHand().clone();
                     if (!mainHand.getType().equals(Material.FIREWORK_ROCKET)) {
                         new BukkitMsgBuilder("&cYou must hold a rocket in your hand to use this feature!").send(player);
@@ -49,10 +48,10 @@ public class FireworkCmd extends CustomCommand {
                     }
                     rocketEditor(mainHand,player);
                 }));
-                creator.addItem(new SkullBuilder(HeadTexture.GREEN_PLUS.getTexture()).name("&dPersonal Saves").clickAction(e -> {
+                creator.addItem(new SkullBuilder(HeadTexture.GREEN_HEART.getTexture()).name("&3Personal Saves").slot(5).addLore("&7Fireworks you've created and saved","","&3➤ &7Click to view").clickAction(e -> {
                     personalSaves(player,creator);
                 }))
-                .addItem(new SkullBuilder(HeadTexture.GREEN_PLUS.getTexture()).name("&dPublic Saves").clickAction(e -> {
+                .addItem(new SkullBuilder(HeadTexture.CLASSIC_GLOBE.getTexture()).name("&3Public Saves").slot(7).addLore("&7Fireworks made by others","","&3➤ &7Click to view").clickAction(e -> {
                     publicSaves(player,creator);
                 }));
         instance.getMenuManager().open(creator,player);
@@ -84,6 +83,10 @@ public class FireworkCmd extends CustomCommand {
         instance.getFireworks().save();
     }
 
+    private String fireworkName(CustomFirework cf) {
+        return "&3" + ((cf.getName() == null) ? "Unnamed Firework" : cf.getName());
+    }
+
     public MenuV2 showFireworks(Player player, UUID filter) {
         ArrayList<CustomFirework> fireworks = getAllPublicFireworks();
         if (filter != null) {
@@ -91,21 +94,11 @@ public class FireworkCmd extends CustomCommand {
         }
         MenuV2 saves = new PaginatedMenu("&8"+(((filter == null) ? "Public" : "Your")+" Saves"), 27, player).clickCloseMenu(true);
         fireworks.forEach(fw -> {
-            MenuV2Item menuItem = new MenuV2Item(Material.FIREWORK_ROCKET).name("&d" + ((fw.getName() == null) ? "Unnamed Firework" : fw.getName()))
-                    .leftClickAction(e -> {
-                        player.getInventory().addItem(fw.getItem().clone());
-                    });
-            if (fw.getCreator().equals(player.getUniqueId())) {
-                menuItem.addLore("", "&3Left-click &7to get", "&3Right-click &7to edit");
-                menuItem.rightClickAction(e -> {
-                    editSave(player, fw);
-                });
-            }
+            MenuV2Item menuItem = new MenuV2Item(Material.FIREWORK_ROCKET).name(fireworkName(fw)).clickAction(e -> editSave(player,fw));
             saves.addItem(menuItem);
         });
         return saves;
     }
-
     public void personalSaves(Player player, MenuV2 previous) {
         instance.getMenuManager().open(showFireworks(player,player.getUniqueId()),player,previous);
     }
@@ -116,48 +109,60 @@ public class FireworkCmd extends CustomCommand {
 
     public void editSave(Player player, CustomFirework customFirework) {
         MenuV2 saveEditor = new MenuV2("&8Edit Saved Firework",InventoryType.CHEST,9).clickCloseMenu(true)
-                .addItem(new MenuV2Item(Material.NAME_TAG).name("&dName").clickAction(e -> {
-                    Conversation c = new ConversationFactory(instance)
-                            .withFirstPrompt(new FireworkNamePrompt())
-                            .withEscapeSequence("exit")
-                            .withTimeout(60)
-                            .withPrefix(new InputPrefix())
-                            .withLocalEcho(false)
-                            .buildConversation(player);
-                    c.getContext().setSessionData("drusk",instance);
-                    c.getContext().setSessionData("customFirework",customFirework);
-                    c.begin();
-                }));
-        // Public
-        CustomFirework modifiedFirework = new CustomFirework(customFirework.getItem(),customFirework.getCreator(),customFirework.isPrivate(),customFirework.getName());
-        if (customFirework.isPrivate()) {
-            saveEditor.addItem(new SkullBuilder(HeadTexture.BLACKSTONE_BRICKS_LOCKED.getTexture()).name("&dCurrently Private").addLore("&7Click to make public").clickAction(e -> {
-                modifiedFirework.setIsPrivate(false);
-                updateSavedFirework(customFirework,modifiedFirework);
-                // Delay for save function
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        publicSaves(player,null);
-                    }
-                }.runTaskLater(instance,5L);
+                .addItem(new MenuV2Item(Material.FIREWORK_ROCKET).slot(1).name(fireworkName(customFirework))
+                        .addLore("&7Add a copy to your inventory","","&3➤ &7Click to obtain")
+                        .clickAction(e -> {
+                            player.getInventory().addItem(customFirework.getItem().clone());
+                        }));
+        if (customFirework.getCreator().equals(player.getUniqueId())) {
+            // Name
+            saveEditor.addItem(new MenuV2Item(Material.NAME_TAG).slot(4).name("&3Name").clickAction(e -> {
+                Conversation c = new ConversationFactory(instance)
+                        .withFirstPrompt(new FireworkNamePrompt())
+                        .withEscapeSequence("exit")
+                        .withTimeout(60)
+                        .withPrefix(new InputPrefix())
+                        .withLocalEcho(false)
+                        .buildConversation(player);
+                c.getContext().setSessionData("drusk",instance);
+                c.getContext().setSessionData("customFirework",customFirework);
+                c.begin();
             }));
-        } else {
-            saveEditor.addItem(new SkullBuilder(HeadTexture.BLACKSTONE_BRICKS_UNLOCKED.getTexture()).name("&dCurrently Public").addLore("&7Click to make private").clickAction(e -> {
-                modifiedFirework.setIsPrivate(true);
-                updateSavedFirework(customFirework,modifiedFirework);
-                // Delay for save function
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        personalSaves(player,null);
-                    }
-                }.runTaskLater(instance,5L);
+            // Sharing
+            CustomFirework modifiedFirework = new CustomFirework(customFirework.getItem(),customFirework.getCreator(),customFirework.isPrivate(),customFirework.getName());
+            if (customFirework.isPrivate()) {
+                saveEditor.addItem(new SkullBuilder(HeadTexture.BLACKSTONE_BRICKS_LOCKED.getTexture()).slot(5).name("&3Currently Private").addLore("&7Click to make public").clickAction(e -> {
+                    modifiedFirework.setIsPrivate(false);
+                    updateSavedFirework(customFirework,modifiedFirework);
+                    // Delay for save function
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            publicSaves(player,null);
+                        }
+                    }.runTaskLater(instance,5L);
+                }));
+            } else {
+                saveEditor.addItem(new SkullBuilder(HeadTexture.BLACKSTONE_BRICKS_UNLOCKED.getTexture()).slot(5).name("&3Currently Public").addLore("&7Click to make private").clickAction(e -> {
+                    modifiedFirework.setIsPrivate(true);
+                    updateSavedFirework(customFirework,modifiedFirework);
+                    // Delay for save function
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            personalSaves(player,null);
+                        }
+                    }.runTaskLater(instance,5L);
+                }));
+            }
+            // Delete
+            saveEditor.addItem(new SkullBuilder(HeadTexture.RED_X.getTexture()).slot(6).name("&3Delete").clickAction(e -> {
+                updateSavedFirework(customFirework,null);
             }));
         }
-        // Delete
-        saveEditor.addItem(new MenuV2Item(Material.RED_WOOL).name("&dDelete").clickAction(e -> {
-            updateSavedFirework(customFirework,null);
+        // Exit
+        saveEditor.addItem(new SkullBuilder(HeadTexture.GRAY_ARROW_LEFT.getTexture()).slot(7).name("&3Exit").addLore("&3➤ &7Go back to the home menu").clickAction(e -> {
+            new FireworkCmd(instance).executeAsPlayer(player);
         }));
         instance.getMenuManager().open(saveEditor,player);
     }
@@ -167,33 +172,42 @@ public class FireworkCmd extends CustomCommand {
         MenuV2 creator = new PaginatedMenu("&8Rocket Editor",27,player).clickCloseMenu(true);
         // Obtain
         firework.setAmount(64);
-        creator.addItem(new SkullBuilder(HeadTexture.FIREWORK_ROCKET.getTexture()).name("&dObtain Rocket")
-                .addLore("&7Get a copy of the current state of the rocket you're editing")
+        creator.addItem(new SkullBuilder(HeadTexture.FIREWORK_ROCKET.getTexture()).name("&3Create")
+                .addLore("&7Add a copy of current firework state to your inventory","","&3➤ &7Click to obtain")
                 .clickAction(e -> {
                     player.getInventory().addItem(firework);
                 }));
         // Save
-        creator.addItem(new SkullBuilder(HeadTexture.GREEN_ARROW_DOWN.getTexture()).name("&dSave").clickAction(e -> {
-            if (getAllSavedFireworksFrom(player.getUniqueId()).size() > 24) {
-                new BukkitMsgBuilder("&cYou can't create more than 25 saved fireworks at this time.").send(player);
-                return;
-            }
-            ArrayList<CustomFirework> fireworks = getAllSavedFireworks();
-            fireworks.add(new CustomFirework(firework,player.getUniqueId(),true,null));
-            instance.getFireworks().get().set("fireworks",fireworks);
-            instance.getFireworks().save();
-            personalSaves(player,null);
-        }));
+        creator.addItem(new SkullBuilder(HeadTexture.GREEN_ARROW_DOWN.getTexture()).name("&3Save")
+                .addLore("&7Saves current firework state for later access and sharing","","&3➤ &7Click to save")
+                .clickAction(e -> {
+                    if (getAllSavedFireworksFrom(player.getUniqueId()).size() > 29) {
+                        new BukkitMsgBuilder("&cYou can't create more than 30 saved fireworks at this time.").send(player);
+                        return;
+                    }
+                    ArrayList<CustomFirework> fireworks = getAllSavedFireworks();
+                    fireworks.add(new CustomFirework(firework,player.getUniqueId(),true,null));
+                    instance.getFireworks().get().set("fireworks",fireworks);
+                    instance.getFireworks().save();
+                    personalSaves(player,null);
+                }));
         // Power
-        creator.addItem(new MenuV2Item(Material.GUNPOWDER).name("&dPower").addLore("&7Sets the approximate power of the firework.","&7Each level of power is half a second of flight time.").clickAction(e -> {
-            power(firework,player,fireworkItemStackConsumer -> {
-                rocketEditor(fireworkItemStackConsumer,player); // TODO checkout
-            },null);
-        }));
+        creator.addItem(new MenuV2Item(Material.GUNPOWDER).name("&3Power")
+                .addLore(
+                        "&7Sets the approximate power of the firework.",
+                        "&7Each level of power is half a second of flight time.","",
+                        "&3ℹ &7Currently: &3"+fwm.getPower(),"",
+                        "&3➤ &7Click to select power level"
+                )
+                .clickAction(e -> {
+                    power(firework,player,fireworkItemStackConsumer -> {
+                        rocketEditor(fireworkItemStackConsumer,player);
+                    },null);
+                }));
         // Effects
         for (int i = 0; i < fwm.getEffects().size(); i++) {
             int finalI = i;
-            MenuV2Item effectDisplay = new MenuV2Item(Material.FIREWORK_ROCKET).name("&dEffect #"+(i+1)).clickAction(e -> {
+            MenuV2Item effectDisplay = new MenuV2Item(Material.FIREWORK_ROCKET).name("&3Effect #"+(i+1)).clickAction(e -> {
                 effectEditor(firework, finalI, player);
             });
             FireworkEffect effect = fwm.getEffects().get(0);
@@ -214,10 +228,15 @@ public class FireworkCmd extends CustomCommand {
         }
         // New effect
         if (!(fwm.getEffects().size() > 10)) {
-            creator.addItem(new SkullBuilder(HeadTexture.GREEN_PLUS.getTexture()).name("&dNew Effect").clickAction(e -> {
-                effectEditor(firework, null, player);
-            }));
+            creator.addItem(new SkullBuilder(HeadTexture.GREEN_PLUS.getTexture()).name("&3New Effect")
+                    .addLore("&7Add another effect","","&3➤ &7Click to open new effect editor")
+                    .clickAction(e -> {
+                        effectEditor(firework, null, player);
+                    }));
         }
+        creator.addItem(new SkullBuilder(HeadTexture.RED_ARROW_LEFT.getTexture()).name("&3Quit Without Saving").addLore("&3➤ &7Go back to the home menu").clickAction(e -> {
+            new FireworkCmd(instance).executeAsPlayer(player);
+        }));
         instance.getMenuManager().open(creator,player);
     }
 
@@ -248,49 +267,32 @@ public class FireworkCmd extends CustomCommand {
             consumer.accept(rocket);
             return;
         }
-        MenuV2 creator = new MenuV2("&8Rocket Editor » Power", InventoryType.CHEST,9).clickCloseMenu(true)
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dPower 0").clickAction(e -> {
-                    fwm.setPower(0);
-                    rocket.setItemMeta(fwm);
-                    consumer.accept(rocket);
-                }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dPower 1").clickAction(e -> {
-                    fwm.setPower(1);
-                    rocket.setItemMeta(fwm);
-                    consumer.accept(rocket);
-                }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dPower 2").clickAction(e -> {
-                    fwm.setPower(2);
-                    rocket.setItemMeta(fwm);
-                    consumer.accept(rocket);
-                }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dPower 3").clickAction(e -> {
-                    fwm.setPower(3);
-                    rocket.setItemMeta(fwm);
-                    consumer.accept(rocket);
-                }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dPower 4").clickAction(e -> {
-                    fwm.setPower(4);
-                    rocket.setItemMeta(fwm);
-                    consumer.accept(rocket);
-                }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dPower 5").clickAction(e -> {
-                    fwm.setPower(5);
-                    rocket.setItemMeta(fwm);
-                    consumer.accept(rocket);
-                }))
-                .addItem(new MenuV2Item(Material.NAME_TAG).name("&dCustom Input").clickAction(e -> {
-                    Conversation c = new ConversationFactory(instance)
-                            .withFirstPrompt(new FireworkPowerPrompt())
-                            .withEscapeSequence("exit")
-                            .withTimeout(60)
-                            .withPrefix(new InputPrefix())
-                            .withLocalEcho(false)
-                            .buildConversation(player);
-                    c.getContext().setSessionData("drusk",instance);
-                    c.getContext().setSessionData("rocket",rocket);
-                    c.begin();
-                }));
+        MenuV2 creator = new MenuV2("&8Rocket Editor » Power", InventoryType.CHEST,9).clickCloseMenu(true);
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            creator.addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3Power "+i)
+                    .addLore("&7Set the rocket's power level to "+i,"","&3➤ &7Click to set power level")
+                    .clickAction(e -> {
+                        fwm.setPower(finalI);
+                        rocket.setItemMeta(fwm);
+                        consumer.accept(rocket);
+                    }));
+        }
+        creator.addItem(new MenuV2Item(Material.NAME_TAG).name("&3Custom Input").addLore("&7Set power level by typing an integer from 0-10 in chat","","&3➤ &7Click to type value in chat").clickAction(e -> {
+            Conversation c = new ConversationFactory(instance)
+                    .withFirstPrompt(new FireworkPowerPrompt())
+                    .withEscapeSequence("exit")
+                    .withTimeout(60)
+                    .withPrefix(new InputPrefix())
+                    .withLocalEcho(false)
+                    .buildConversation(player);
+            c.getContext().setSessionData("drusk",instance);
+            c.getContext().setSessionData("rocket",rocket);
+            c.begin();
+        }));
+        creator.addItem(new SkullBuilder(HeadTexture.RED_ARROW_LEFT.getTexture()).name("&3Back").addLore("&3➤ &7Go back to the previous menu").clickAction(e -> {
+            consumer.accept(rocket);
+        }));
         instance.getMenuManager().open(creator,player);
     }
 
@@ -305,22 +307,70 @@ public class FireworkCmd extends CustomCommand {
         FireworkEffect.Builder builder = FireworkEffect.builder().with(effect.getType()).flicker(effect.hasFlicker()).trail(effect.hasTrail()).withColor(effect.getColors()).withFade(effect.getFadeColors());
         // Editor
         MenuV2 creator = new MenuV2("&8Rocket Editor » Effect", InventoryType.CHEST,9);
-        creator.addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dType").clickAction(e -> {
-            type(builder,player,updateFirework(firework,effectId,player));
-        }));
-        creator.addItem(new SkullBuilder(HeadTexture.PAINT_BUCKET_RAINBOW.getTexture()).name("&dColor").clickAction(e -> {
+        creator.addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3Type")
+                .addLore(
+                        "&7The shape of the explosion","",
+                        "&3ℹ &7Currently: &3"+effect.getType().name(),"",
+                        "&3➤ &7Click to configure"
+                )
+                .clickAction(e -> {
+                    type(builder,player,updateFirework(firework,effectId,player));
+                }));
+        // Primary color
+        MenuV2Item color = new SkullBuilder(HeadTexture.PAINT_BUCKET_RAINBOW.getTexture()).name("&3Initial Color").addLore("&7The colors of the initial particles of","&7the explosion, randomly selected from","").clickAction(e -> {
             color(builder,player,updateFirework(firework,effectId,player),true);
-        }));
-        creator.addItem(new SkullBuilder(HeadTexture.PAINT_BUCKET_RAINBOW.getTexture()).name("&dFade Color").clickAction(e -> {
+        });
+        if (!effect.getColors().isEmpty()) {
+            color.addLore("&3ℹ &7Currently");
+            effect.getColors().forEach(ec -> {
+                String hex = TextColor.color(ec.getRed(),ec.getGreen(),ec.getBlue()).asHexString();
+                color.addLore("&8╠══ &3"+hex);
+            });
+            color.addLore("&7");
+        }
+        color.addLore("&3➤ &7Click to configure");
+        creator.addItem(color);
+        // Fade color
+        MenuV2Item fadeColor = new SkullBuilder(HeadTexture.PAINT_BUCKET_RAINBOW.getTexture()).name("&3Fade Color").addLore("&7The colors of the fading particles of","&7the explosion, randomly selected from","").clickAction(e -> {
             color(builder,player,updateFirework(firework,effectId,player),false);
+        });
+        if (!effect.getColors().isEmpty()) {
+            fadeColor.addLore("&3ℹ &7Currently");
+            effect.getColors().forEach(ec -> {
+                String hex = TextColor.color(ec.getRed(),ec.getGreen(),ec.getBlue()).asHexString();
+                fadeColor.addLore("&8╠══ &3"+hex);
+            });
+            fadeColor.addLore("&7");
+        }
+        fadeColor.addLore("&3➤ &7Click to configure");
+        creator.addItem(fadeColor);
+        // Flicker
+        creator.addItem(new MenuV2Item(Material.GLOWSTONE_DUST).name("&3Flicker")
+                .addLore(
+                        "&7Whether or not the explosion has a twinkle effect","",
+                        "&3ℹ &7Currently: &3"+effect.hasFlicker(),"",
+                        "&3➤ &7Click to configure"
+                )
+                .clickAction(e -> {
+                    flicker(builder,player,updateFirework(firework,effectId,player));
+                }));
+        creator.addItem(new MenuV2Item(Material.LEVER).name("&3Trail")
+                .addLore(
+                        "&7Whether or not the explosion has a trail effect","",
+                        "&3ℹ &7Currently: &3"+effect.hasTrail(),"",
+                        "&3➤ &7Click to configure"
+                )
+                .clickAction(e -> {
+                    trail(builder,player,updateFirework(firework,effectId,player));
+                }));
+        creator.addItem(new SkullBuilder(HeadTexture.RED_X.getTexture()).name("&3Remove").addLore("&7Remove this effect").clickAction(e -> {
+            if (effectId != null) {
+                fwm.removeEffect(effectId);
+            }
+            firework.setItemMeta(fwm);
+            rocketEditor(firework, player);
         }));
-        creator.addItem(new MenuV2Item(Material.GLOWSTONE_DUST).name("&dFlicker").clickAction(e -> {
-            flicker(builder,player,updateFirework(firework,effectId,player));
-        }));
-        creator.addItem(new MenuV2Item(Material.LEVER).name("&dTrail").clickAction(e -> {
-            trail(builder,player,updateFirework(firework,effectId,player));
-        }));
-        creator.addItem(new SkullBuilder(HeadTexture.GREEN_CHECK_MARK.getTexture()).name("&dDone").addLore("&7Go back to the rocket editor").clickAction(e -> {
+        creator.addItem(new SkullBuilder(HeadTexture.GREEN_CHECK_MARK.getTexture()).name("&3Done").addLore("&7Go back to the rocket editor").clickAction(e -> {
             firework.setItemMeta(fwm);
             rocketEditor(firework, player);
         }));
@@ -330,24 +380,27 @@ public class FireworkCmd extends CustomCommand {
 
     private void type(FireworkEffect.Builder builder, Player player, Consumer<FireworkEffect.Builder> consumer) {
         MenuV2 creator = new MenuV2("&8Rocket Editor » Type", InventoryType.CHEST,9)
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dBall").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3Ball").clickAction(e -> {
                     builder.with(FireworkEffect.Type.BALL);
                     consumer.accept(builder);
                 }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dLarge Ball").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3Large Ball").clickAction(e -> {
                     builder.with(FireworkEffect.Type.BALL_LARGE);
                     consumer.accept(builder);
                 }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dStar").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3Star").clickAction(e -> {
                     builder.with(FireworkEffect.Type.STAR);
                     consumer.accept(builder);
                 }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dBurst").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3Burst").clickAction(e -> {
                     builder.with(FireworkEffect.Type.BURST);
                     consumer.accept(builder);
                 }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dCreeper").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3Creeper").clickAction(e -> {
                     builder.with(FireworkEffect.Type.CREEPER);
+                    consumer.accept(builder);
+                }))
+                .addItem(new SkullBuilder(HeadTexture.RED_ARROW_LEFT.getTexture()).name("&3Back").addLore("&3➤ &7Go back to the previous menu").clickAction(e -> {
                     consumer.accept(builder);
                 }));
         instance.getMenuManager().open(creator,player);
@@ -356,7 +409,7 @@ public class FireworkCmd extends CustomCommand {
     private void color(FireworkEffect.Builder builder, Player player, Consumer<FireworkEffect.Builder> consumer, boolean isRegularColor) {
         MenuV2 creator = new MenuV2("&8Rocket Editor » "+(isRegularColor ? "" : "Fade "+"Color"), InventoryType.CHEST,18).clickCloseMenu(true);
         for (DyeColor value : DyeColor.values()) {
-            creator.addItem(new MenuV2Item(Material.valueOf(value.name().toUpperCase()+"_DYE")).name("&d"+value.name()).clickAction(e -> {
+            creator.addItem(new MenuV2Item(Material.valueOf(value.name().toUpperCase()+"_DYE")).name("&3"+value.name()).clickAction(e -> {
                 if (isRegularColor) {
                     builder.withColor(value.getColor());
                 } else {
@@ -366,7 +419,7 @@ public class FireworkCmd extends CustomCommand {
             }));
         }
         // Custom input
-        creator.addItem(new MenuV2Item(Material.NAME_TAG).name("&dCustom Hex Color Input").clickAction(e -> {
+        creator.addItem(new MenuV2Item(Material.NAME_TAG).name("&3Custom Hex Color Input").clickAction(e -> {
             Conversation c = new ConversationFactory(instance)
                     .withFirstPrompt(new FireworkColorPrompt())
                     .withEscapeSequence("exit")
@@ -379,27 +432,24 @@ public class FireworkCmd extends CustomCommand {
             c.getContext().setSessionData("builder",builder);
             c.getContext().setSessionData("consumer",consumer);
             c.begin();
+        }))
+        .addItem(new SkullBuilder(HeadTexture.RED_ARROW_LEFT.getTexture()).name("&3Back").addLore("&3➤ &7Go back to the previous menu").clickAction(e -> {
+            consumer.accept(builder);
         }));
         instance.getMenuManager().open(creator,player);
     }
 
-    public void color(FireworkEffect.Builder builder, Player player, Consumer<FireworkEffect.Builder> consumer, boolean isRegularColor, Color color) {
-        if (isRegularColor) {
-            builder.withColor(color);
-        } else {
-            builder.withFade(color);
-        }
-        consumer.accept(builder);
-    }
-
     private void flicker(FireworkEffect.Builder builder, Player player, Consumer<FireworkEffect.Builder> consumer) {
         MenuV2 creator = new MenuV2("&8Rocket Editor » Flicker", InventoryType.CHEST,9)
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dTrue").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3True").clickAction(e -> {
                     builder.flicker(true);
                     consumer.accept(builder);
                 }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dFalse").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3False").clickAction(e -> {
                     builder.flicker(false);
+                    consumer.accept(builder);
+                }))
+                .addItem(new SkullBuilder(HeadTexture.RED_ARROW_LEFT.getTexture()).name("&3Back").addLore("&3➤ &7Go back to the previous menu").clickAction(e -> {
                     consumer.accept(builder);
                 }));
         instance.getMenuManager().open(creator,player);
@@ -407,12 +457,15 @@ public class FireworkCmd extends CustomCommand {
 
     private void trail(FireworkEffect.Builder builder, Player player, Consumer<FireworkEffect.Builder> consumer) {
         MenuV2 creator = new MenuV2("&8Rocket Editor » Trail", InventoryType.CHEST,9)
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dTrue").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3True").clickAction(e -> {
                     builder.trail(true);
                     consumer.accept(builder);
                 }))
-                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&dFalse").clickAction(e -> {
+                .addItem(new MenuV2Item(Material.FIREWORK_STAR).name("&3False").clickAction(e -> {
                     builder.trail(false);
+                    consumer.accept(builder);
+                }))
+                .addItem(new SkullBuilder(HeadTexture.RED_ARROW_LEFT.getTexture()).name("&3Back").addLore("&3➤ &7Go back to the previous menu").clickAction(e -> {
                     consumer.accept(builder);
                 }));
         instance.getMenuManager().open(creator,player);

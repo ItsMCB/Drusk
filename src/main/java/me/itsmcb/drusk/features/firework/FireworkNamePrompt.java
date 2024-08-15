@@ -28,7 +28,7 @@ public class FireworkNamePrompt extends ValidatingPrompt {
         modifiedFirework.setName(input);
         new FireworkCmd((Drusk) c.getSessionData("drusk")).updateSavedFirework(customFirework,modifiedFirework);
         Player player = (Player) c.getForWhom();
-        new FireworkCmd((Drusk) c.getSessionData("drusk")).executeAsPlayer(player,new String[]{});
+        new FireworkCmd((Drusk) c.getSessionData("drusk")).executeAsPlayer(player);
         return END_OF_CONVERSATION;
     }
 }

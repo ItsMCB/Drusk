@@ -20,7 +20,7 @@ public class CachedSCmd extends CustomCommand {
     @Override
     public void executeAsPlayer(Player player, String[] args) {
         MenuV2 selectMenu = new PaginatedMenu("Select Cached Skin to Wear",36, player);
-        instance.getCacheManager().getFromFile().forEach(cachedPlayer -> {
+        instance.getCacheManager().getAllFromFile().forEach(cachedPlayer -> {
             selectMenu.addItem(new SkullBuilder(cachedPlayer).name("&d&l"+cachedPlayer.getName()).clickAction(e -> {
                 PlayerUtils.setSkin(player, cachedPlayer.getPlayerSkin().getValue(),cachedPlayer.getPlayerSkin().getSignature());
                 System.out.println(cachedPlayer.getPlayerSkin().getValue());

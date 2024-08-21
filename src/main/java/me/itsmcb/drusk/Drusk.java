@@ -1,11 +1,13 @@
 package me.itsmcb.drusk;
 
 import libs.dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
-import me.itsmcb.drusk.features.firework.CustomFirework;
-import me.itsmcb.drusk.features.firework.FireworkFeat;
-import me.itsmcb.drusk.features.text.TextFeat;
+import me.itsmcb.drusk.features.character.Character;
+import me.itsmcb.drusk.features.character.CharacterFeat;
+import me.itsmcb.drusk.features.character.CharacterSkin;
 import me.itsmcb.drusk.features.creative.CreativeFeat;
 import me.itsmcb.drusk.features.drusk.DruskCMDFeature;
+import me.itsmcb.drusk.features.firework.CustomFirework;
+import me.itsmcb.drusk.features.firework.FireworkFeat;
 import me.itsmcb.drusk.features.flyspeed.FlySpeedFeat;
 import me.itsmcb.drusk.features.fun.FunFeat;
 import me.itsmcb.drusk.features.gamemode.GamemodeFeat;
@@ -13,6 +15,8 @@ import me.itsmcb.drusk.features.hooked.bungeecord.connect.ConnectFeature;
 import me.itsmcb.drusk.features.inventory.InventoryFeat;
 import me.itsmcb.drusk.features.item.ItemFeat;
 import me.itsmcb.drusk.features.logger.LoggerFeat;
+import me.itsmcb.drusk.features.nickname.Nickname;
+import me.itsmcb.drusk.features.nickname.NicknameFeat;
 import me.itsmcb.drusk.features.notify.NotifyFeat;
 import me.itsmcb.drusk.features.skin.DruskCostume;
 import me.itsmcb.drusk.features.skin.SkinFeature;
@@ -24,8 +28,10 @@ import me.itsmcb.drusk.features.tab.TabFeat;
 import me.itsmcb.drusk.features.talk.MsgFeat;
 import me.itsmcb.drusk.features.teleport.TeleportFeat;
 import me.itsmcb.drusk.features.teleport.TeleportRequestManager;
+import me.itsmcb.drusk.features.text.TextFeat;
 import me.itsmcb.drusk.features.tools.ToolsFeature;
 import me.itsmcb.drusk.features.weext.WorldEditExtensionsFeat;
+import me.itsmcb.drusk.hooks.PAPI;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.CacheManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.LocalizationManager;
@@ -57,6 +63,8 @@ public final class Drusk extends JavaPlugin {
     private BoostedConfig costumes;
 
     private BoostedConfig fireworks;
+
+    private BoostedConfig characters;
 
     private MenuV2Manager menuManager;
 
@@ -94,6 +102,10 @@ public final class Drusk extends JavaPlugin {
         return fireworks;
     }
 
+    public BoostedConfig getCharacters() {
+        return characters;
+    }
+
     private File textsFile = Path.of(getDataFolder() + File.separator + "texts").toFile();
 
    TeleportRequestManager teleportRequestManager;
@@ -111,6 +123,8 @@ public final class Drusk extends JavaPlugin {
 
     public void resetManagers() {
         mainConfig.reload();
+        // Cache
+        cacheManager.refresh();
         costumes.reload();
         // Texts
         textsFile.mkdirs();
@@ -134,6 +148,11 @@ public final class Drusk extends JavaPlugin {
         costumes = new BoostedConfig(getDataFolder(), "costumes", getResource("costumes.yml"), SpigotSerializer.getInstance());
         ConfigurationSerialization.registerClass(CustomFirework.class, "CustomFirework");
         fireworks = new BoostedConfig(getDataFolder(), "fireworks", null, SpigotSerializer.getInstance());
+        ConfigurationSerialization.registerClass(Nickname.class, "Nickname");
+        ConfigurationSerialization.registerClass(CharacterSkin.class, "CharacterSkin");
+        ConfigurationSerialization.registerClass(Character.class, "Character");
+        characters = new BoostedConfig(getDataFolder(), "characters", null, SpigotSerializer.getInstance());
+
 
         // Set permissions
         this.permissionManager = new PermissionManager();
@@ -155,6 +174,8 @@ public final class Drusk extends JavaPlugin {
         bukkitFeatureManager.register(new SpawnFeature(instance));
         bukkitFeatureManager.register(new StatusFeature(instance));
         bukkitFeatureManager.register(new SkinFeature(instance));
+        bukkitFeatureManager.register(new CharacterFeat(instance));
+        bukkitFeatureManager.register(new NicknameFeat(instance));
         bukkitFeatureManager.register(new InventoryFeat(instance));
         bukkitFeatureManager.register(new FlySpeedFeat(instance));
         bukkitFeatureManager.register(new WorldEditExtensionsFeat(instance));
@@ -175,5 +196,10 @@ public final class Drusk extends JavaPlugin {
         resetManagers();
 
         teleportRequestManager = new TeleportRequestManager(this);
+    }
+
+    @Override
+    public void onLoad() {
+        new PAPI(this).register();
     }
 }

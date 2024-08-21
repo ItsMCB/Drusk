@@ -4,14 +4,14 @@ import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
-import me.itsmcb.vexelcore.bukkit.api.utils.Msg;
 import me.itsmcb.vexelcore.bukkit.api.utils.ParticleUtils;
 import me.itsmcb.vexelcore.bukkit.api.utils.PlayerUtils;
-import me.itsmcb.vexelcore.common.api.web.mojang.OnlinePlayerSkin;
+import me.itsmcb.vexelcore.bukkit.plugin.CachedPlayer;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
@@ -30,18 +30,25 @@ public class UsernameSCmd extends CustomCommand {
             new BukkitMsgBuilder("&cProvide a username").send(player);
             return;
         }
-        OnlinePlayerSkin skinInformation = PlayerUtils.setRealSkin(player, args[0], instance);
-        if (!(skinInformation.isInformationComplete())) {
-            Msg.send(player, "&cError occurred. Does that player exist?");
+        CachedPlayer cp = instance.getCacheManager().get(args[0]);
+        if (!cp.isComplete()) {
+            new BukkitMsgBuilder("&cAn error occurred. Does that player exist?").send(player);
             return;
         }
-        ParticleUtils.spawnCircle(
-                0.5,
-                12.0,
-                player.getLocation(),
-                Particle.REDSTONE,
-                new Particle.DustOptions(Color.fromRGB(0, 127, 255), 1.0F)
-        );
+        PlayerUtils.setSkin(player,cp.getPlayerSkin().getValue(),cp.getPlayerSkin().getSignature());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                //OnlinePlayerSkin skinInformation = PlayerUtils.setRealSkin(player, args[0], instance);
+                ParticleUtils.spawnCircle(
+                        0.5,
+                        12.0,
+                        player.getLocation(),
+                        Particle.REDSTONE,
+                        new Particle.DustOptions(Color.fromRGB(0, 127, 255), 1.0F)
+                );
+            }
+        }.runTaskAsynchronously(instance);
 
     }
 

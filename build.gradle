@@ -7,90 +7,50 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven {
-        name = 'papermc-repo'
-        url = 'https://repo.papermc.io/repository/maven-public/'
-    }
-    maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
-    }
-    maven { url 'https://jitpack.io' }
+    maven { url 'https://papermc.io/repo/repository/maven-public/' }
+    maven { url 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url 'https://repo.helpch.at/releases/' } // PAPI
+    maven { url "https://maven.playpro.com/" } // CoreProtect
+    //maven { url "https://maven.enginehub.org/repo/" } // FAWE
+    maven { url "https://repo.opencollab.dev/main/" } // Geyser
+    maven { url 'https://jitpack.io' } // JitPack - Todo remove?
     maven {
         name = 'citizens-repo'
         url = 'https://maven.citizensnpcs.co/repo'
     }
-    // PAPI
-    maven {
-        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
-    }
-    // CoreProtect
-    maven {
-        url = "https://maven.playpro.com/"
-    }
-    // Geyser
-    repositories {
-        maven {
-            url = uri("https://repo.opencollab.dev/main/")
-        }
-    }
-
 }
 
 dependencies {
-    // Paper
-    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
-    // Citizens
-    compileOnly('net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT') {
+    compileOnly 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT' // Paper
+    compileOnly('net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT') { // Citizens
         exclude group: '*', module: '*'
     }
-    // LuckPerms
-    compileOnly 'net.luckperms:api:5.4'
-    // NoteBlock API
-    implementation 'com.github.koca2000:NoteBlockAPI:1.6.1'
-    // Placeholder API
-    compileOnly 'me.clip:placeholderapi:2.11.3'
-    // CoreProtect
-    compileOnly "net.coreprotect:coreprotect:22.4"
-    // FAWE
-    implementation(platform("com.intellectualsites.bom:bom-1.18.x:1.20"))
-    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core")
-    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit")
-    // VexelCore
-    compileOnly files('/home/martin/GitHub/VexelCore/bukkit/build/libs/VexelCore-Bukkit-1.0.1-SNAPSHOT.jar')
-    // Voyage
-    compileOnly files('/home/martin/GitHub/Voyage/build/libs/Voyage-1.0-SNAPSHOT.jar')
-    // Jackson
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0'
-    // Geyser Floodgate
-    compileOnly('org.geysermc.floodgate:api:2.2.2-SNAPSHOT')
-    // Discord Bot JDA
-    implementation("net.dv8tion:JDA:5.0.0-beta.19")
+    compileOnly 'me.clip:placeholderapi:2.11.6' // PAPI
+    compileOnly "net.coreprotect:coreprotect:22.4" // CoreProtect
+    compileOnly 'net.luckperms:api:5.4' // LuckPerms
+    implementation 'com.github.koca2000:NoteBlockAPI:1.6.1' // NoteBlock API
+    implementation(platform("com.intellectualsites.bom:bom-1.18.x:1.20")) // FAWE
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core") // FAWE
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit") // FAWE
+    compileOnly files('/home/martin/GitHub/VexelCore/bukkit/build/libs/VexelCore-Bukkit-1.0.1-SNAPSHOT.jar') // VexelCore
+    compileOnly files('/home/martin/GitHub/Voyage/build/libs/Voyage-1.0-SNAPSHOT.jar') // Voyage
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0' // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0' // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0' // Jackson
+    compileOnly('org.geysermc.floodgate:api:2.2.2-SNAPSHOT') // Geyser Floodgate
+    implementation("net.dv8tion:JDA:5.2.1") // Discord Bot JDA
 }
 
-def targetJavaVersion = 17
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release = targetJavaVersion
-    }
+    options.release = 21
 }
 
-processResources {
-    def props = [version: version]
-    inputs.properties props
-    filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
-        expand props
-    }
+tasks.named('compileJava') {
+    source = sourceSets.main.java
 }

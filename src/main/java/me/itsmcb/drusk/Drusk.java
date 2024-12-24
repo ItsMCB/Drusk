@@ -34,7 +34,7 @@ import me.itsmcb.drusk.features.weext.WorldEditExtensionsFeat;
 import me.itsmcb.drusk.hooks.PAPI;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.CacheManager;
-import me.itsmcb.vexelcore.bukkit.api.managers.LocalizationManager;
+import me.itsmcb.vexelcore.bukkit.api.managers.OldLocalizationManager;
 import me.itsmcb.vexelcore.bukkit.api.managers.PermissionManager;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Manager;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
@@ -53,7 +53,7 @@ public final class Drusk extends JavaPlugin {
 
     private Drusk instance;
     private BukkitFeatureManager bukkitFeatureManager;
-    private LocalizationManager localizationManager;
+    private OldLocalizationManager localizationManager;
     private PermissionManager permissionManager;
 
     private BoostedConfig mainConfig;
@@ -81,7 +81,7 @@ public final class Drusk extends JavaPlugin {
     public BukkitFeatureManager getBukkitFeatureManager() {
         return bukkitFeatureManager;
     }
-    public LocalizationManager getLocalizationManager() {
+    public OldLocalizationManager getLocalizationManager() {
         return localizationManager;
     }
     public PermissionManager getPermissionManager() { return permissionManager; }
@@ -162,7 +162,7 @@ public final class Drusk extends JavaPlugin {
 
         // Load configurations and options
         // todo hook into future localization plugin to get default server language
-        this.localizationManager = new LocalizationManager(this, "en_US");
+        this.localizationManager = new OldLocalizationManager(this, "en_US");
         localizationManager.register("en_US");
 
         // Register features

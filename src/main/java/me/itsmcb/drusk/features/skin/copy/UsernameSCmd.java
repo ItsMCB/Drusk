@@ -44,7 +44,7 @@ public class UsernameSCmd extends CustomCommand {
                         0.5,
                         12.0,
                         player.getLocation(),
-                        Particle.REDSTONE,
+                        Particle.POOF,
                         new Particle.DustOptions(Color.fromRGB(0, 127, 255), 1.0F)
                 );
             }

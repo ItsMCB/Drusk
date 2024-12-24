@@ -3,16 +3,12 @@ package me.itsmcb.drusk.features.teleport;
 import me.itsmcb.drusk.Drusk;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
-import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
-import me.itsmcb.voyage.Voyage;
 import me.itsmcb.voyage.api.VoyageWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.List;
 
 public class BackCmd extends CustomCommand {
     public BackCmd() {

@@ -7,7 +7,10 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven { url 'https://papermc.io/repo/repository/maven-public/' }
+    maven {
+        name = "papermc"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
     maven { url 'https://oss.sonatype.org/content/groups/public/' }
     maven { url 'https://repo.helpch.at/releases/' } // PAPI
     maven { url "https://maven.playpro.com/" } // CoreProtect
@@ -34,11 +37,11 @@ dependencies {
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit") // FAWE
     compileOnly files('/home/martin/GitHub/VexelCore/bukkit/build/libs/VexelCore-Bukkit-1.0.1-SNAPSHOT.jar') // VexelCore
     compileOnly files('/home/martin/GitHub/Voyage/build/libs/Voyage-1.0-SNAPSHOT.jar') // Voyage
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0' // Jackson
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0' // Jackson
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0' // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2' // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2' // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.18.2' // Jackson
     compileOnly('org.geysermc.floodgate:api:2.2.2-SNAPSHOT') // Geyser Floodgate
-    implementation("net.dv8tion:JDA:5.2.1") // Discord Bot JDA
+    implementation("net.dv8tion:JDA:5.2.2") // Discord Bot JDA
 }
 
 java {
@@ -51,6 +54,18 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 21
 }
 
+processResources {
+    filesMatching('plugin.yml') {
+        expand project.properties
+    }
+}
+
+tasks.register('processSources', Sync) {
+    from sourceSets.main.java
+    into "$buildDir/generated-src"
+    filter { line -> line.replace('${version}', version.toString()) }
+}
+
 tasks.named('compileJava') {
-    source = sourceSets.main.java
+    source = processSources.outputs
 }

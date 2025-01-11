@@ -18,8 +18,8 @@ public class GamemodeFeat extends BukkitFeature {
     }
 
     public static boolean setGameMode(Player playerTrying, GameMode gameMode, Player playerAffected) {
-        playerAffected.setGameMode(gameMode);
         new BukkitMsgBuilder("&7Set gamemode of &a" + playerAffected.getName() + "&7 to &a" + gameMode.name() + "&7.").send(playerTrying);
+        playerAffected.setGameMode(gameMode);
         return true;
     }
 }

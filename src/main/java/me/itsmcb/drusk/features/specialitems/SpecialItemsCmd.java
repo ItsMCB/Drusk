@@ -13,6 +13,10 @@ import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 public class SpecialItemsCmd extends CustomCommand {
 
@@ -27,7 +31,7 @@ public class SpecialItemsCmd extends CustomCommand {
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
-        MenuV2 menu = new MenuV2("&d&lSpecial Items", InventoryType.CHEST,18);
+        MenuV2 menu = new MenuV2("&7ꜱᴘᴇᴄɪᴀʟ ɪᴛᴇᴍꜱ", InventoryType.CHEST,18);
 
         MenuV2Item barrier = new MenuV2Item(Material.BARRIER).name("&d&lBarrier");
         menu.addItem(barrier.leftClickAction(event -> {
@@ -116,6 +120,18 @@ public class SpecialItemsCmd extends CustomCommand {
         snowyGrass.setItemMeta(snowyBlockMeta);
         menu.addItem(snowyGrass.leftClickAction(event -> {
             player.getInventory().addItem(snowyGrass.getCleanItemStack());
+        }));
+
+        // Infinite Night Vision
+        MenuV2Item nightVisionPotion = new MenuV2Item(Material.POTION)
+                .name("&d&lInfinite Night Vision Potion")
+                .addLore("&7Drink milk to remove all effects!");
+        PotionMeta nightVisionPotionMeta = (PotionMeta) nightVisionPotion.getItemMeta();
+        nightVisionPotionMeta.addCustomEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 0, false, false), true);
+        //nightVisionPotionMeta.setBasePotionType(PotionType.LONG_NIGHT_VISION);
+        nightVisionPotion.setItemMeta(nightVisionPotionMeta);
+        menu.addItem(nightVisionPotion.leftClickAction(event -> {
+            player.getInventory().addItem(nightVisionPotion.getCleanItemStack());
         }));
 
         /*

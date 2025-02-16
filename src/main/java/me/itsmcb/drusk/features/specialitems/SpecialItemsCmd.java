@@ -16,7 +16,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 
 public class SpecialItemsCmd extends CustomCommand {
 
@@ -55,6 +54,13 @@ public class SpecialItemsCmd extends CustomCommand {
             player.getInventory().addItem(itemFrame.getCleanItemStack());
         }));
 
+        MenuV2Item glowItemFrame = new MenuV2Item(Material.GLOW_ITEM_FRAME)
+                .name("&d&lInvisible Glow Item Frame")
+                .addData(new MenuV2ItemData(specialItemKey,"invisible_glow_item_frame"));
+        menu.addItem(glowItemFrame.leftClickAction(event -> {
+            player.getInventory().addItem(glowItemFrame.getCleanItemStack());
+        }));
+
         MenuV2Item knowledgeBook = new MenuV2Item(Material.KNOWLEDGE_BOOK)
                 .name("&d&lKnowledge Book");
         menu.addItem(knowledgeBook.leftClickAction(event -> {
@@ -66,6 +72,13 @@ public class SpecialItemsCmd extends CustomCommand {
                 .addData(new MenuV2ItemData(specialItemKey,"lit_furnace"));
         menu.addItem(furnace.leftClickAction(event -> {
             player.getInventory().addItem(furnace.getCleanItemStack());
+        }));
+
+        MenuV2Item blastFurnace = new MenuV2Item(Material.BLAST_FURNACE)
+                .name("&d&lLit Blast Furnace")
+                .addData(new MenuV2ItemData(specialItemKey,"lit_furnace"));
+        menu.addItem(blastFurnace.leftClickAction(event -> {
+            player.getInventory().addItem(blastFurnace.getCleanItemStack());
         }));
 
         MenuV2Item smoker = new MenuV2Item(Material.SMOKER)
@@ -80,6 +93,13 @@ public class SpecialItemsCmd extends CustomCommand {
                 .addData(new MenuV2ItemData(specialItemKey,"lit_campfire"));
         menu.addItem(campfire.leftClickAction(event -> {
             player.getInventory().addItem(campfire.getCleanItemStack());
+        }));
+
+        MenuV2Item trapdoor = new MenuV2Item(Material.IRON_TRAPDOOR)
+                .name("&d&lOpen Trapdoor")
+                .addData(new MenuV2ItemData(specialItemKey,"open_trapdoor"));
+        menu.addItem(trapdoor.leftClickAction(event -> {
+            player.getInventory().addItem(trapdoor.getCleanItemStack());
         }));
 
         MenuV2Item endPortalFrame = new MenuV2Item(Material.END_PORTAL_FRAME)
@@ -102,6 +122,11 @@ public class SpecialItemsCmd extends CustomCommand {
         menu.addItem(obsidian2.leftClickAction(event -> {
             player.getInventory().addItem(obsidian2.getCleanItemStack());
         }));
+
+        MenuV2Item endGateway = new MenuV2Item(Material.END_STONE)
+                .name("&d&lEnd Gateway")
+                .addData(new MenuV2ItemData(specialItemKey,"end_gateway"));
+        menu.addItem(endGateway.leftClickAction(event -> player.getInventory().addItem(endGateway.getCleanItemStack())));
 
         MenuV2Item light = new MenuV2Item(Material.LIGHT)
                 .name("&d&lLight 15")

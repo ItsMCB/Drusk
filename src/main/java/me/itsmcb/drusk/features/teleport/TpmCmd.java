@@ -14,42 +14,17 @@ public class TpmCmd extends CustomCommand {
     private Drusk instance;
 
     public TpmCmd(Drusk instance) {
-        super("tpm", "Teleport to middle of block", "drusk.tp.m");
+        super("tpm", "Teleport to middle of current block", "drusk.tp.m");
         this.instance = instance;
     }
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
         CMDHelper cmdHelper = new CMDHelper(args);
-        if (!(cmdHelper.isInt(0) && cmdHelper.isInt(1))) {
-            new BukkitMsgBuilder("&cFirst and second argument must be integers!").send(player);
-            return;
-        }
-        double x = Integer.parseInt(args[0])+.5;
-        double z = Integer.parseInt(args[1])+.5;
-        // /tpm x z
-        if (args.length == 2) {
-            teleportPlayer(player, player.getWorld(),x,player.getWorld().getHighestBlockYAt((int) x, (int) z)+1,z);
-            return;
-        }
-        // tpm x y z
-        if (!(cmdHelper.isInt(2))) {
-            new BukkitMsgBuilder("&cThird argument must be an integer!").send(player);
-            return;
-        }
-        double y = Integer.parseInt(args[1])+.5;
-        z = Integer.parseInt(args[2])+.5;
-        if (!(cmdHelper.argExists(3))) {
-            teleportPlayer(player, player.getWorld(),x,y,z);
-            return;
-        }
-        // tpm x y z [username]
-        Player selectedPlayer = Bukkit.getPlayer(args[3]);
-        if (selectedPlayer == null) {
-            new BukkitMsgBuilder("&cThat player isn't online!").send(player);
-            return;
-        }
-        teleportPlayer(selectedPlayer,player.getWorld(),x,y,z);
+        double x = player.getLocation().getBlockX()+0.5;
+        double z = player.getLocation().getBlockZ()+0.5;
+        // TODO w/ YAW option as NORTH, NORTHEAST, etc.
+        teleportPlayer(player,player.getWorld(),x,player.getLocation().getY(),z);
     }
 
     private void teleportPlayer(Player player, World world, double x, double y, double z) {

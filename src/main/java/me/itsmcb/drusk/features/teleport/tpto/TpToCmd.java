@@ -27,7 +27,7 @@ public class TpToCmd extends CustomCommand {
     public void executeAsPlayer(Player player, String[] args) {
         CMDHelper cmdHelper = new CMDHelper(args);
         if (!cmdHelper.argExists(0)) {
-            player.sendMessage(help());
+            help(player);
             return;
         }
         Player targetPlayer = Bukkit.getPlayer(args[0]);

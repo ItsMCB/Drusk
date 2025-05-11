@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2' // Jackson
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2' // Jackson
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.18.2' // Jackson
-    compileOnly('org.geysermc.floodgate:api:2.2.2-SNAPSHOT') // Geyser Floodgate
+    compileOnly('org.geysermc.floodgate:api:2.2.3-SNAPSHOT') // Geyser Floodgate
     implementation("net.dv8tion:JDA:5.2.2") // Discord Bot JDA
 }
 

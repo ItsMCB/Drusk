@@ -2,15 +2,15 @@ package me.itsmcb.drusk.features.skin;
 
 import libs.dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.itsmcb.drusk.Drusk;
+import me.itsmcb.vexelcore.bukkit.VexelCoreBukkitAPI;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Item;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.PaginatedMenu;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.SkullBuilder;
+import me.itsmcb.vexelcore.bukkit.api.menu.Menu;
+import me.itsmcb.vexelcore.bukkit.api.menu.MenuButton;
+import me.itsmcb.vexelcore.bukkit.api.menu.MenuRowSize;
+import me.itsmcb.vexelcore.bukkit.api.menu.PaginatedMenu;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.PlayerUtils;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 
 import java.util.List;
 
@@ -36,28 +36,28 @@ public class SelectSCmd extends CustomCommand {
         List<DruskCostume> summerOfArcade = (List<DruskCostume>) category.getList("legacy_console_summer_of_arcade");
         List<DruskCostume> skinPackTwo = (List<DruskCostume>) category.getList("legacy_console_skin_pack_two");
 
-        MenuV2 demoMenu = new PaginatedMenu("Random",36, player);
+        Menu demoMenu = new PaginatedMenu(MenuRowSize.FOUR,"Random");
         addSkins(demoCostumes, demoMenu, player);
 
-        MenuV2 materialsMenu = new PaginatedMenu("Materials",36, player);
+        Menu materialsMenu = new PaginatedMenu(MenuRowSize.FOUR,"Materials");
         addSkins(materialCostumes, materialsMenu, player);
 
-        MenuV2 skinPackDefaultMenu = new PaginatedMenu("Default",36, player);
+        Menu skinPackDefaultMenu = new PaginatedMenu(MenuRowSize.FOUR,"Default");
         addSkins(skinPackDefault, skinPackDefaultMenu, player);
 
-        MenuV2 summerOfArcadeMenu = new PaginatedMenu("Summer of Arcade",36, player);
+        Menu summerOfArcadeMenu = new PaginatedMenu(MenuRowSize.FOUR,"Summer of Arcade");
         addSkins(summerOfArcade, summerOfArcadeMenu, player);
 
-        MenuV2 skinPackOneMenu = new PaginatedMenu("Skin Pack One",36, player);
+        Menu skinPackOneMenu = new PaginatedMenu(MenuRowSize.FOUR,"Skin Pack One");
         addSkins(skinPackOne, skinPackOneMenu, player);
 
-        MenuV2 skinPackTwoMenu = new PaginatedMenu("Skin Pack Two",36, player);
+        Menu skinPackTwoMenu = new PaginatedMenu(MenuRowSize.FOUR,"Skin Pack Two");
         addSkins(skinPackTwo, skinPackTwoMenu, player);
 
-        MenuV2 ourGiftToYouMenu = new PaginatedMenu("Our Gift to You",36, player);
+        Menu ourGiftToYouMenu = new PaginatedMenu(MenuRowSize.FOUR,"Our Gift to You");
         addSkins(ourGiftToYou, ourGiftToYouMenu, player);
 
-        MenuV2 specialMenu = new PaginatedMenu("Special",36, player);
+        Menu specialMenu = new PaginatedMenu(MenuRowSize.FOUR,"Special");
         addSkins(special, specialMenu, player);
 
         // Main Menu
@@ -70,45 +70,54 @@ public class SelectSCmd extends CustomCommand {
         String fidget = "ewogICJ0aW1lc3RhbXAiIDogMTU4OTUxNDExMzQ3OSwKICAicHJvZmlsZUlkIiA6ICI4MmM2MDZjNWM2NTI0Yjc5OGI5MWExMmQzYTYxNjk3NyIsCiAgInByb2ZpbGVOYW1lIiA6ICJOb3ROb3RvcmlvdXNOZW1vIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzE4Yjc5Njc2ZmMzYmI3Zjk3MjEwNTRkNTgwZGE4MzY5OTA0MzYwYWUzOTExYjIwMTRjYjgzZjg0ZmYwYTQwOCIKICAgIH0KICB9Cn0";
         String redKnight = "ewogICJ0aW1lc3RhbXAiIDogMTY4NzI3MTIyODkwMSwKICAicHJvZmlsZUlkIiA6ICJjYjYxY2U5ODc4ZWI0NDljODA5MzliNWYxNTkwMzE1MiIsCiAgInByb2ZpbGVOYW1lIiA6ICJWb2lkZWRUcmFzaDUxODUiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjQ5ZDZhNThlMmJkYWViOGQ2NjY3NmNlNzQ1NGQxNmMwYTdiYWFlYTViMjIzNmYxZDBiYjY2YWEyYWJkNzU3MCIKICAgIH0KICB9Cn0";
 
-        MenuV2 selectMenu = new MenuV2("Skin Packs", InventoryType.CHEST,27);
-                selectMenu.addItem(new SkullBuilder(amongUsCharacter).name("&aRandom").slot(2).leftClickAction(event -> {
-                    instance.getMenuManager().open(demoMenu, player, selectMenu);
-                }))
-                .addItem(new SkullBuilder(ironOre).name("&aMaterials").slot(4).leftClickAction(event -> {
-                    instance.getMenuManager().open(materialsMenu, player, selectMenu);
-                }))
-                .addItem(new SkullBuilder(edmond).name("&aSpecial").slot(6).leftClickAction(event -> {
-                    instance.getMenuManager().open(specialMenu, player, selectMenu);
-                }))
-                .addItem(new SkullBuilder(boxerSteve).name("&aDefault").addLore("&7Legacy Console","&7Released July 13, 2012").slot(10).leftClickAction(event -> {
-                    instance.getMenuManager().open(skinPackDefaultMenu, player, selectMenu);
-                }))
-                .addItem(new SkullBuilder(fidget).name("&aSummer of Arcade").addLore("&7Legacy Console").slot(12).leftClickAction(event -> {
-                    instance.getMenuManager().open(summerOfArcadeMenu, player, selectMenu);
-                }))
-                .addItem(new SkullBuilder(knightTemplar).name("&aSkin Pack One").addLore("&7Legacy Console").slot(14).leftClickAction(event -> {
-                    instance.getMenuManager().open(skinPackOneMenu, player, selectMenu);
-                }))
-                .addItem(new SkullBuilder(redKnight).name("&aSkin Pack Two").addLore("&7Legacy Console").slot(16).leftClickAction(event -> {
-                    instance.getMenuManager().open(skinPackTwoMenu, player, selectMenu);
-                }))
-                .addItem(new SkullBuilder(gift).name("&aOur Gift to You").addLore("&7Bedrock Marketplace &8| &757Digital").slot(22).leftClickAction(event -> {
-                    instance.getMenuManager().open(ourGiftToYouMenu, player, selectMenu);
-                }));
-        instance.getMenuManager().open(selectMenu, player);
+        Menu selectMenu = new Menu(MenuRowSize.THREE,"Skin Packs");
+        selectMenu.addButton(2,new MenuButton(amongUsCharacter).name("&aRandom").click(event -> {
+            VexelCoreBukkitAPI.getMenuManager().open(demoMenu,player);
+            VexelCoreBukkitAPI.getMenuManager().setPreviousMenu(demoMenu,selectMenu);
+        }))
+        .addButton(4,new MenuButton(ironOre).name("&aMaterials").click(event -> {
+            VexelCoreBukkitAPI.getMenuManager().open(materialsMenu,player);
+            VexelCoreBukkitAPI.getMenuManager().setPreviousMenu(materialsMenu,selectMenu);
+        }))
+        .addButton(6,new MenuButton(edmond).name("&aSpecial").click(event -> {
+            VexelCoreBukkitAPI.getMenuManager().open(specialMenu,player);
+            VexelCoreBukkitAPI.getMenuManager().setPreviousMenu(specialMenu,selectMenu);
+        }))
+        .addButton(10,new MenuButton(boxerSteve).name("&aDefault").addLore("&7Legacy Console","&7Released July 13, 2012").click(event -> {
+            VexelCoreBukkitAPI.getMenuManager().open(skinPackDefaultMenu,player);
+            VexelCoreBukkitAPI.getMenuManager().setPreviousMenu(skinPackDefaultMenu,selectMenu);
+        }))
+        .addButton(12,new MenuButton(fidget).name("&aSummer of Arcade").addLore("&7Legacy Console").click(event -> {
+            VexelCoreBukkitAPI.getMenuManager().open(summerOfArcadeMenu,player);
+            VexelCoreBukkitAPI.getMenuManager().setPreviousMenu(summerOfArcadeMenu,selectMenu);
+        }))
+        .addButton(14,new MenuButton(knightTemplar).name("&aSkin Pack One").addLore("&7Legacy Console").click(event -> {
+            VexelCoreBukkitAPI.getMenuManager().open(skinPackOneMenu,player);
+            VexelCoreBukkitAPI.getMenuManager().setPreviousMenu(skinPackOneMenu,selectMenu);
+        }))
+        .addButton(16,new MenuButton(redKnight).name("&aSkin Pack Two").addLore("&7Legacy Console").click(event -> {
+            VexelCoreBukkitAPI.getMenuManager().open(skinPackTwoMenu,player);
+            VexelCoreBukkitAPI.getMenuManager().setPreviousMenu(skinPackTwoMenu,selectMenu);
+        }))
+        .addButton(22,new MenuButton(gift).name("&aOur Gift to You").addLore("&7Bedrock Marketplace &8| &757Digital").click(event -> {
+            VexelCoreBukkitAPI.getMenuManager().open(ourGiftToYouMenu,player);
+            VexelCoreBukkitAPI.getMenuManager().setPreviousMenu(ourGiftToYouMenu,selectMenu);
+        }));
+        VexelCoreBukkitAPI.getMenuManager().open(selectMenu,player);
     }
 
-    private void addSkins(List<DruskCostume> costumes, MenuV2 menu, Player player) {
+    private void addSkins(List<DruskCostume> costumes, Menu menu, Player player) {
         costumes.forEach(costume -> {
-            MenuV2Item item = new SkullBuilder(costume.getValue()).name("&r&a"+costume.getName());
+            MenuButton btn = new MenuButton(costume.getValue()).name("&r&a"+costume.getName());
             if (costume.hasDescription()) {
-                item.lore(List.of(new BukkitMsgBuilder(costume.getDescription()).get()));
+                btn.addLore(costume.getDescription());
             }
-            item.addLore(new BukkitMsgBuilder("&7").get(),new BukkitMsgBuilder("&7Click to apply skin").get());
-            menu.addItem(item.leftClickAction(event -> {
+            btn.addLore(new BukkitMsgBuilder("&7").get(),new BukkitMsgBuilder("&7Click to apply skin").get())
+            .click(e -> {
                 PlayerUtils.setSkin(player, costume.getValue(),costume.getSignature());
                 new BukkitMsgBuilder("&7Now wearing skin &d"+costume.getName()).send(player);
-            }));
+            });
+            menu.addButton(btn);
         });
     }
 

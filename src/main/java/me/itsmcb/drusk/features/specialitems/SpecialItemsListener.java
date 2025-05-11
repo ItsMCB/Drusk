@@ -24,6 +24,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -77,10 +78,10 @@ public class SpecialItemsListener implements Listener {
                 smoker.setBlockData(blockData);
                 smoker.update(true,false);
             }
-            if (data.equals("lit_campfire")) {
+            if (data.equals("unlit_campfire")) {
                 Campfire campfire = (Campfire) event.getBlockPlaced().getState();
                 BlockData blockData = event.getBlock().getBlockData();
-                ((Lightable) blockData).setLit(true);
+                ((Lightable) blockData).setLit(false);
                 campfire.setBlockData(blockData);
                 campfire.update(true,false);
             }
@@ -163,7 +164,7 @@ public class SpecialItemsListener implements Listener {
             }
 
         }
-        /*
+
         String data = itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
         if (data == null) {
             return;
@@ -177,10 +178,11 @@ public class SpecialItemsListener implements Listener {
                 location.getWorld().spawn(location, Fox.class, CreatureSpawnEvent.SpawnReason.CUSTOM, fox -> {
                     fox.setFoxType(Fox.Type.SNOW);
                     fox.customName(null);  // Remove custom name (otherwise it will be the same as the spawn egg)
+                    System.out.println(fox.createSnapshot().toString());
                 });
             }
         }
-         */
+
     }
 
     public List<Material> getTrapdoors() {
@@ -203,11 +205,7 @@ public class SpecialItemsListener implements Listener {
             if (data == null) {
                 return;
             }
-            if (data.equals("invisible_item_frame") && event.getEntity().getType().equals(EntityType.ITEM_FRAME)) {
-                ItemFrame itemFrame = (ItemFrame) event.getEntity();
-                itemFrame.setVisible(false);
-            }
-            if (data.equals("invisible_glow_item_frame") && event.getEntity().getType().equals(EntityType.GLOW_ITEM_FRAME)) {
+            if (data.equals("glow") && (event.getEntity().getType().equals(EntityType.ITEM_FRAME) || event.getEntity().getType().equals(EntityType.GLOW_ITEM_FRAME))) {
                 ItemFrame itemFrame = (ItemFrame) event.getEntity();
                 itemFrame.setVisible(false);
             }

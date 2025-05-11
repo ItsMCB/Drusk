@@ -64,12 +64,6 @@ public class ItemInfoScmd extends CustomCommand {
                 });
             });
         }
-        if (!itemMeta.getDestroyableKeys().isEmpty()) {
-            new BukkitMsgBuilder("&7Destroyable Keys:").send(player);
-            itemMeta.getDestroyableKeys().forEach(k -> {
-                new BukkitMsgBuilder("&7"+k.getNamespace()+": &d"+k.getKey()).send(player);
-            });
-        }
 
 
 

@@ -1,9 +1,11 @@
 package me.itsmcb.drusk.features.skin.copy;
 
 import me.itsmcb.drusk.Drusk;
+import me.itsmcb.vexelcore.bukkit.VexelCoreBukkitAPI;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.SkullBuilder;
+import me.itsmcb.vexelcore.bukkit.api.menu.MenuButton;
+import me.itsmcb.vexelcore.bukkit.api.menu.MenuRowSize;
+import me.itsmcb.vexelcore.bukkit.api.menu.PaginatedMenu;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.bukkit.api.utils.PlayerUtils;
@@ -37,14 +39,16 @@ public class OnlineSCmd extends CustomCommand {
             new BukkitMsgBuilder("&cThere aren't any other players online to copy.").send(player);
             return;
         }
-        MenuV2 menu = new MenuV2("Select Player To Copy");
+        PaginatedMenu menu = new PaginatedMenu(MenuRowSize.FIVE,"&7Select Player to Copy");
         // Filter command executor
         Bukkit.getOnlinePlayers().stream().filter(onlinePlayer -> onlinePlayer.getUniqueId() != player.getUniqueId()).forEach(onlinePlayer -> {
-            menu.addItem(new SkullBuilder(onlinePlayer).name("&d&l"+onlinePlayer.getName()).addLore(new BukkitMsgBuilder("&7Click to copy skin!").get()).leftClickAction(event -> {
-                PlayerUtils.copy(onlinePlayer,player);
-            }));
+            VexelCoreBukkitAPI.getCacheManager().getCachedPlayer(onlinePlayer.getUniqueId()).thenAccept(p -> {
+                menu.addButton(new MenuButton(p).name("&d"+p.getUsername()).addLore("&7Click to wear").click(e -> {
+                    PlayerUtils.copy(onlinePlayer,player);
+                }));
+            });
         });
-        instance.getMenuManager().open(menu, player);
+        VexelCoreBukkitAPI.getMenuManager().open(menu,player);
     }
 
     @Override

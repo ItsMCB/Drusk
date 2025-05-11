@@ -5,6 +5,8 @@ import me.itsmcb.drusk.features.skin.copy.CopySCmd;
 import me.itsmcb.vexelcore.bukkit.api.command.CustomCommand;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
 import me.itsmcb.vexelcore.bukkit.api.utils.PlayerUtils;
+import me.itsmcb.vexelcore.common.api.command.CMDHelper;
+import me.itsmcb.vexelcore.common.api.utils.ArgUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,17 +30,18 @@ public class SkinCMD extends CustomCommand {
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (args.length > 0 && args[0].equalsIgnoreCase("reset")) {
+        CMDHelper cmdHelper = new CMDHelper(args);
+        if (cmdHelper.isCalling("reset")) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
                     PlayerUtils.setRealSkin(player, player, instance);
                     new BukkitMsgBuilder("&aReset your skin").send(player);
-                    return;
                 }
-                player.sendMessage(help());
-            }
-        }.runTaskAsynchronously(instance);
+            }.runTaskAsynchronously(instance);
+            return;
+        }
+        new SelectSCmd(instance).execute(player, ArgUtils.shift(args));
     }
 
     @Override

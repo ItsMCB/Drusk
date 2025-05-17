@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 public class TargetSCmd extends CustomCommand {
     public TargetSCmd(Drusk instance) {
-        super("target", "Copy skin from the player or NPC you're looking at.", "drusk.skin");
+        super("target", "Copy skin from player or NPC targeted in your crosshair", "drusk.skin");
     }
 
     @Override
@@ -19,11 +19,10 @@ public class TargetSCmd extends CustomCommand {
             new BukkitMsgBuilder("&cNo target entity found").send(player);
             return;
         }
-
         if (targetEntity instanceof Player target) {
             PlayerUtils.copy(target,player);
             return;
         }
-        new BukkitMsgBuilder("&cInvalid target.").send(player);
+        new BukkitMsgBuilder("&cYour crosshair must be targeted on another player or NPC!").send(player);
     }
 }
